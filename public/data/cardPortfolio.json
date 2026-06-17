@@ -1,0 +1,195 @@
+{
+    "cardPortfolio_grid": [
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-1.png",
+            "badge": "Branding",
+            "title": "Moiri Perfume",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-2.png",
+            "badge": "Creative",
+            "title": "Kuchia Mockup",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-3.png",
+            "badge": "Branding",
+            "title": "Meisa Cosmetics",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-4.png",
+            "badge": "Creative",
+            "title": "Catars Mockup",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-5.png",
+            "badge": "Creative",
+            "title": "Lummi Essential Oil",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-6.png",
+            "badge": "Photography",
+            "title": "Hois Skin Care",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-7.png",
+            "badge": "Photography",
+            "title": "Apaaam perfume",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-8.png",
+            "badge": "Branding",
+            "title": "Marc Handbags",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-9.png",
+            "badge": "Branding",
+            "title": "Maan Packaging",
+            "displayDescription": "d-none",
+            "description": ""
+        },
+        {
+            "classList": "col-md-6 col-12 card-portfolio-group",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-grid-10.png",
+            "badge": "Mobile APP",
+            "title": "Meerikat App",
+            "displayDescription": "d-none",
+            "description": ""
+        }
+    ],
+    "cardPortfolio_list": [
+        {
+            "classList": "col-12",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-list-1.png",
+            "badge": "Branding",
+            "title": "Moiri Perfume",
+            "displayDescription": "d-block",
+            "description": "A refined fragrance branding project, combining elegance with a modern, timeless identity that reflects sophistication."
+        },
+        {
+            "classList": "col-12",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-list-2.png",
+            "badge": "Creative",
+            "title": "Maan Packaging",
+            "displayDescription": "d-block",
+            "description": "A minimal yet practical packaging design, created to highlight product value while maintaining visual clarity and style."
+        },
+        {
+            "classList": "col-12",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-list-3.png",
+            "badge": "Creative",
+            "title": "Kuchia Mockup",
+            "displayDescription": "d-block",
+            "description": "A clean and versatile mockup collection, carefully crafted to support professional presentations and brand showcases."
+        },
+        {
+            "classList": "col-12",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-list-4.png",
+            "badge": "Branding",
+            "title": "Meisa Cosmetics",
+            "displayDescription": "d-block",
+            "description": "A fresh, feminine branding concept designed for a contemporary beauty line, balancing elegance and modern appeal."
+        },
+        {
+            "classList": "col-12",
+            "linkBadge": "#",
+            "linkPost": "portfolio-details",
+            "img": "/assets/imgs/other/portfolio/img-list-5.png",
+            "badge": "Photography",
+            "title": "Apaaam perfume",
+            "displayDescription": "d-block",
+            "description": "A luxurious perfume identity, blending artistry and sophistication to create a distinctive and memorable brand image."
+        }
+    ],
+    "cardPortfolio_related": [
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/portfolio/img-grid-1.png",
+            "linkBadge": "#",
+            "linkPost": "#",
+            "badge": "Branding",
+            "bgBadge": "bg-1",
+            "title": "Moiri Perfume"
+        },
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/portfolio/img-grid-2.png",
+            "linkBadge": "#",
+            "linkPost": "#",
+            "badge": "Branding",
+            "bgBadge": "bg-1",
+            "title": "Maan Packaging"
+        },
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/portfolio/img-grid-3.png",
+            "linkBadge": "#",
+            "linkPost": "#",
+            "badge": "Branding",
+            "bgBadge": "bg-1",
+            "title": "Meisa Cosmetics"
+        },
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/portfolio/img-grid-4.png",
+            "linkBadge": "#",
+            "linkPost": "#",
+            "badge": "Photography",
+            "bgBadge": "bg-1",
+            "title": "Apaaam perfume"
+        }
+    ]
+}

@@ -1,0 +1,562 @@
+{
+    "cardCollections": [
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/img-other-9.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "The Rise of Mindful Living in a Digital World"
+        },
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/img-other-10.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Conscious Consumerism: Making Better Choices"
+        },
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/img-other-11.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "Streaming Wars: Who’s Winning in 2026?"
+        },
+        {
+            "cornerBgColor": "white",
+            "img": "/assets/imgs/other/img-other-12.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "Cryptocurrency in 2026: Innovation or Illusion?"
+        }
+    ],
+    "cardSideBar": [
+        {
+            "fontSize": "fs-7",
+            "style": "style-2",
+            "img": "/assets/imgs/other/img-other-4.png",
+            "link": "#",
+            "title": "Iconic Film Directors and Their Influence on Cinema",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        },
+        {
+            "fontSize": "fs-7",
+            "style": "style-2",
+            "img": "/assets/imgs/other/img-other-5.png",
+            "link": "#",
+            "title": "The Role of Storytelling in Film and Television",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        },
+        {
+            "fontSize": "fs-7",
+            "style": "style-2",
+            "img": "/assets/imgs/other/img-other-6.png",
+            "link": "#",
+            "title": "The Impact of AI on Digital Art and Creativity",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        },
+        {
+            "fontSize": "fs-7",
+            "style": "style-2",
+            "img": "/assets/imgs/other/img-other-7.png",
+            "link": "#",
+            "title": "Must-See Art Exhibitions Around the World This Year",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        }
+    ],
+    "sec1Card1": [
+        {
+            "img": "/assets/imgs/page/img-1.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkRead": "#",
+            "badge": "Fashion",
+            "bgBadge": "bg-2",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "readNum": "162",
+            "title": "What's the 'Hero piece' in your closet?",
+            "description": "The 'hero piece' in your closet is that standout item that instantly elevates any outfit...",
+            "comment": "98"
+        },
+        {
+            "img": "/assets/imgs/page/img-2.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkRead": "#",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-3",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "readNum": "162",
+            "title": "Textile Storytelling in Modern Fashion",
+            "description": "In today’s fashion landscape, textiles are more than just fabric — they’re vessels of culture, memory, and innovation",
+            "comment": "98"
+        },
+        {
+            "img": "/assets/imgs/page/img-3.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkRead": "#",
+            "badge": "Culture",
+            "bgBadge": "bg-5",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "readNum": "162",
+            "title": "Museums x Couture: A New Collaboration",
+            "description": "Where history meets high fashion, a new wave of collaboration is redefining both art and style.",
+            "comment": "98"
+        },
+        {
+            "img": "/assets/imgs/page/img-2.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkRead": "#",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-3",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "readNum": "162",
+            "title": "Textile Storytelling in Modern Fashion",
+            "description": "In today’s fashion landscape, textiles are more than just fabric — they’re vessels of culture, memory, and innovation",
+            "comment": "98"
+        },
+        {
+            "img": "/assets/imgs/page/img-1.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkRead": "#",
+            "badge": "Fashion",
+            "bgBadge": "bg-2",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "readNum": "162",
+            "title": "What's the 'Hero piece' in your closet?",
+            "description": "The 'hero piece' in your closet is that standout item that instantly elevates any outfit...",
+            "comment": "98"
+        },
+        {
+            "img": "/assets/imgs/page/img-3.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkRead": "#",
+            "badge": "Culture",
+            "bgBadge": "bg-5",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "readNum": "162",
+            "title": "Museums x Couture: A New Collaboration",
+            "description": "Where history meets high fashion, a new wave of collaboration is redefining both art and style.",
+            "comment": "98"
+        }
+    ],
+    "cardPopupSearch": [
+        {
+            "style": "style-1",
+            "fontSize": "fs-7",
+            "img": "/assets/imgs/other/img-other-1.png",
+            "link": "#",
+            "title": "Breaking Down the Elements of a Masterpiece Painting",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        },
+        {
+            "style": "style-1",
+            "fontSize": "fs-7",
+            "img": "/assets/imgs/other/img-other-2.png",
+            "link": "#",
+            "title": "The Revival of Classical Art in a Digital Age",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        },
+        {
+            "style": "style-1",
+            "fontSize": "fs-7",
+            "img": "/assets/imgs/other/img-other-3.png",
+            "link": "#",
+            "title": "Must-See Art Exhibitions Around the World This Year",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        },
+        {
+            "style": "style-1",
+            "fontSize": "fs-7",
+            "img": "/assets/imgs/other/img-other-2.png",
+            "link": "#",
+            "title": "The Revival of Classical Art in a Digital Age",
+            "date": "16 Jul, 2026",
+            "time": "6 mins read"
+        }
+    ],
+    "sec3Card3": [
+        {
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "img": "/assets/imgs/page/img-5.png",
+            "badge": "Art",
+            "bgBadge": "bg-1",
+            "readTime": "6 mins read",
+            "title": "Palette & Pattern: Art’s Role in Fashion",
+            "comment": "98",
+            "readNum": "162"
+        },
+        {
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "img": "/assets/imgs/page/img-6.png",
+            "badge": "Sports",
+            "bgBadge": "bg-2",
+            "readTime": "6 mins read",
+            "title": "Urban Renaissance: Streetwear as Art",
+            "comment": "98",
+            "readNum": "162"
+        }
+    ],
+    "sec3Card4": [
+        {
+            "linkBadge": "#",
+            "linkBadge2": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkAuthor": "/page-author",
+            "badge": "Lifestyle",
+            "badge2": "Model",
+            "bgBadge": "bg-1",
+            "bgBadge2": "bg-2",
+            "readTime": "6 mins read",
+            "title": "Gallery to Garment: Art Meets Design",
+            "img": "/assets/imgs/page/img-7.png",
+            "linkVideo": "#",
+            "layoutVideo": "d-flex",
+            "description": "When brushstrokes inspire hemlines and canvases shape silhouettes, the result is a striking fusion of visual art and fashion design.",
+            "imgAuthor": "/assets/imgs/template/author/author-2.png",
+            "author": "Eleanor Pena",
+            "date": "Jun 13, 2026",
+            "comment": "98",
+            "readNum": "162"
+        },
+        {
+            "linkBadge": "#",
+            "linkBadge2": "#",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "linkAuthor": "/page-author",
+            "badge": "Health",
+            "badge2": "Food",
+            "bgBadge": "bg-1",
+            "bgBadge2": "bg-3",
+            "readTime": "6 mins read",
+            "title": "Sustainable Eating in a Climate-Conscious World",
+            "img": "/assets/imgs/page/img-8.png",
+            "linkVideo": "#",
+            "layoutVideo": "d-none",
+            "description": "As climate concerns grow, our plates are becoming powerful tools for change. Sustainable eating—centered on plant-based choices, local sourcing, and reducing food waste.",
+            "imgAuthor": "/assets/imgs/template/author/author-3.png",
+            "author": "Bessie Cooper",
+            "date": "Jun 13, 2026",
+            "comment": "98",
+            "readNum": "162"
+        }
+    ],
+    "authorCard": [
+        {
+            "bgstickyCorner": "",
+            "linkPost": "/page-author",
+            "img": "/assets/imgs/page/img-9.png",
+            "name": "Emma Richardson",
+            "position": "Travel Editor"
+        },
+        {
+            "bgstickyCorner": "",
+            "linkPost": "/page-author",
+            "img": "/assets/imgs/page/img-10.png",
+            "name": "Emma Richardson",
+            "position": "Travel Editor"
+        },
+        {
+            "bgstickyCorner": "",
+            "linkPost": "/page-author",
+            "img": "/assets/imgs/page/img-11.png",
+            "name": "Emma Richardson",
+            "position": "Travel Editor"
+        },
+        {
+            "bgstickyCorner": "",
+            "linkPost": "/page-author",
+            "img": "/assets/imgs/page/img-12.png",
+            "name": "Emma Richardson",
+            "position": "Travel Editor"
+        },
+        {
+            "bgstickyCorner": "",
+            "linkPost": "/page-author",
+            "img": "/assets/imgs/page/img-10.png",
+            "name": "Emma Richardson",
+            "position": "Travel Editor"
+        }
+    ],
+    "categoryCard1": [
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-14.png",
+            "title": "Travel",
+            "count": "368 articles"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-15.png",
+            "title": "Fashion",
+            "count": "170 articles"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-16.png",
+            "title": "Science",
+            "count": "53 articles"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-17.png",
+            "title": "Lifestyle",
+            "count": "58 articles"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-18.png",
+            "title": "Art",
+            "count": "65 articles"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-19.png",
+            "title": "Crafts",
+            "count": "125 articles"
+        }
+    ],
+    "categoryCard2": [
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-20.png",
+            "title": "Travel",
+            "bg": "bg-20"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-21.png",
+            "title": "Fashion",
+            "bg": "bg-21"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-22.png",
+            "title": "Science",
+            "bg": "bg-22"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-23.png",
+            "title": "Lifestyle",
+            "bg": "bg-23"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-24.png",
+            "title": "Art",
+            "bg": "bg-24"
+        },
+        {
+            "linkPost": "#",
+            "img": "/assets/imgs/page/img-25.png",
+            "title": "Crafts",
+            "bg": "bg-25"
+        }
+    ],
+    "sec7Card5Col1": [
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-26.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "The Rise of Mindful Living in a Digital World"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-27.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Plant-Based Living: Trends, Recipes, and Real Talk"
+        }
+    ],
+    "sec7Card5Col2": [
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-29.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "Minimalist Design: Finding Beauty in Simplicity"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-30.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "Streaming Wars: Who’s Winning in 2026?"
+        }
+    ],
+    "sec7Card11": [
+        {
+            "linkComment": "#",
+            "linkBadge": "#",
+            "linkAuthor": "/page-author",
+            "linkPost": "/single-3",
+            "img": "/assets/imgs/page/img-28.png",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-2",
+            "title": "From Street to Runway: How Urban Fashion is Redefining Style",
+            "description": "Once dismissed as counterculture, urban fashion has climbed its way from city sidewalks to the catwalks of major fashion capitals.",
+            "imgAuthor": "/assets/imgs/template/author/author-4.png",
+            "author": "Evara Rose",
+            "date": "Jun 13, 2026",
+            "comment": "98",
+            "readNum": "162"
+        }
+    ],
+    "sec8CardPodcast": [
+        {
+            "img": "/assets/imgs/page/img-32.png",
+            "title": "The Insight Hour",
+            "description": "Jun 13, 2026",
+            "src": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3"
+        },
+        {
+            "img": "/assets/imgs/page/img-33.png",
+            "title": "Beyond the Noise",
+            "description": "Jun 13, 2026",
+            "src": "https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"
+        },
+        {
+            "img": "/assets/imgs/page/img-34.png",
+            "title": "Mindful Daily Talk",
+            "description": "Jun 13, 2026",
+            "src": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3"
+        },
+        {
+            "img": "/assets/imgs/page/img-35.png",
+            "title": "Voices and Vision",
+            "description": "Jun 13, 2026",
+            "src": "https://assets.codepen.io/4358584/Anitek_-_Komorebi.mp3"
+        }
+    ],
+    "sec10Card11": [
+        {
+            "linkComment": "#",
+            "linkBadge": "#",
+            "linkAuthor": "/page-author",
+            "linkPost": "/single-3",
+            "img": "/assets/imgs/page/img-39.png",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-2",
+            "title": "Exploring Urban Farming in the Age of Climate Crisis",
+            "description": "Once dismissed as counterculture, urban fashion has climbed its way from city sidewalks to the catwalks of major fashion capitals.",
+            "imgAuthor": "/assets/imgs/template/author/author-6.png",
+            "author": "Evara Rose",
+            "date": "Jun 13, 2026",
+            "comment": "98",
+            "readNum": "162"
+        }
+    ],
+    "sec10Card6": [
+        {
+            "classList": "",
+            "cardClass": "",
+            "cardTitle": "",
+            "textColor": "",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "img": "/assets/imgs/page/img-40.png",
+            "title": "How to Build a Wardrobe That Reflects Your Identity",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "comment": "98"
+        },
+        {
+            "classList": "",
+            "cardClass": "",
+            "cardTitle": "",
+            "textColor": "",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "img": "/assets/imgs/page/img-41.png",
+            "title": "What Gen Alpha Is Teaching Us About Digital Culture",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "comment": "98"
+        },
+        {
+            "classList": "",
+            "cardClass": "",
+            "cardTitle": "",
+            "textColor": "",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "img": "/assets/imgs/page/img-42.png",
+            "title": "Plant-Based Living: Trends, Recipes, and Real Talk",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "comment": "98"
+        },
+        {
+            "classList": "",
+            "cardClass": "",
+            "cardTitle": "",
+            "textColor": "",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "img": "/assets/imgs/page/img-43.png",
+            "title": "Why Freelancers Are Changing the Future of Work",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "comment": "98"
+        },
+        {
+            "classList": "",
+            "cardClass": "",
+            "cardTitle": "",
+            "textColor": "",
+            "linkPost": "/single-3",
+            "linkComment": "#",
+            "img": "/assets/imgs/page/img-44.png",
+            "title": "The Science of Happiness: What Actually Works",
+            "date": "Jun 13, 2026",
+            "readTime": "6 mins read",
+            "comment": "98"
+        }
+    ]
+}

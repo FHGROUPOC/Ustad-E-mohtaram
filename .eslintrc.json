@@ -1,0 +1,35 @@
+{
+	"extends": [
+		"next/core-web-vitals",
+		"plugin:react/recommended",
+		"plugin:react-hooks/recommended"
+	],
+	"plugins": [
+		"react",
+		"react-hooks"
+	],
+	"rules": {
+		"react/react-in-jsx-scope": "off",
+		"react/prop-types": "off",
+		"react/no-unescaped-entities": "off",
+		"react/display-name": "off",
+		"react-hooks/rules-of-hooks": "error",
+		"react-hooks/exhaustive-deps": "warn",
+		"no-restricted-globals": [
+			"error",
+			{
+				"name": "document",
+				"message": "Use React refs instead of document.querySelector. Consider using useRef hook."
+			},
+			{
+				"name": "window",
+				"message": "Use React hooks like useEffect for window events instead of direct access."
+			}
+		]
+	},
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	}
+}

@@ -1,0 +1,63 @@
+/* ====================== Author ====================== */
+
+.author-main {
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+.author-main input,
+textarea {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  width: 100%;
+  margin-top: 10px;
+
+}
+.author-main .buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.author-main .buttons button {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  width: 50%;
+
+  cursor: pointer;
+  margin-top: 10px;
+}
+.author-main .log-out {
+  font-size: 15px;
+  padding: 8px 5px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  width: 100px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.author-main .google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  gap: 15px;
+  background: #fff;
+  color: #0f0f0f;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid grey;
+  width: 55%;
+  cursor: pointer;
+}
+.author-main .buttons button:hover {
+  background: #ffff;
+  color: #0f0f0f;
+}
+
+/* ====================== Author ====================== */
+
+/* ====================== Author Reviews ====================== */
+
+/* ====================== Author Reviews ====================== */

@@ -1,0 +1,332 @@
+{
+    "sec1Card11": [
+        {
+            "classList": "col-lg-6",
+            "linkComment": "#",
+            "linkBadge": "#",
+            "linkAuthor": "/page-author",
+            "linkPost": "/single-3",
+            "img": "/assets/imgs/page/img-28.png",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-2",
+            "title": "Travel Far, Spend Less: Budget Destinations for 2026",
+            "description": "Once dismissed as counterculture, urban fashion has climbed its way from city sidewalks to the catwalks of major fashion capitals.",
+            "imgAuthor": "/assets/imgs/template/author/author-7.png",
+            "author": "Evara Rose",
+            "date": "Jun 13, 2026",
+            "comment": "98",
+            "readNum": "162"
+        },
+        {
+            "classList": "col-lg-6",
+            "linkComment": "#",
+            "linkBadge": "#",
+            "linkAuthor": "/page-author",
+            "linkPost": "/single-3",
+            "img": "/assets/imgs/page/img-26.png",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-2",
+            "title": "Travel Far, Spend Less: Budget Destinations for 2026",
+            "description": "Once dismissed as counterculture, urban fashion has climbed its way from city sidewalks to the catwalks of major fashion capitals.",
+            "imgAuthor": "/assets/imgs/template/author/author-7.png",
+            "author": "Evara Rose",
+            "date": "Jun 13, 2026",
+            "comment": "98",
+            "readNum": "162"
+        }
+    ],
+    "sec1Card5Col1": [
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-26.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "The Rise of Mindful Living in a Digital World"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-16.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "10 Places You Must Visit Before You Turn 30"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-27.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Plant-Based Living: Trends, Recipes, and Real Talk"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-29.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "Minimalist Design: Finding Beauty in Simplicity"
+        }
+    ],
+    "sec1Card5Col2": [
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-29.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "Minimalist Design: Finding Beauty in Simplicity"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-30.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "Streaming Wars: Who’s Winning in 2026?"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-29.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "Minimalist Design: Finding Beauty in Simplicity"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-10.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Conscious Consumerism: Making Better Choices"
+        }
+    ],
+    "sec1Card5Bottom": [
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-9.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "The Rise of Mindful Living in a Digital World"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-10.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Conscious Consumerism: Making Better Choices"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-11.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "Streaming Wars: Who’s Winning in 2026?"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-12.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "Cryptocurrency in 2026: Innovation or Illusion?"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-16.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "10 Places You Must Visit Before You Turn 30"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-85.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Minimalism in Design: Why Less is Still More"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-70.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Minimalism in Design: Why Less is Still More"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-100.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "The Global News You Might Have Missed This Week"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-101.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "What’s Trending Around the World Right Now"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-9.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "The Rise of Mindful Living in a Digital World"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-4.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "The Global News You Might Have Missed This Week"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-17.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "What’s Trending Around the World Right Now"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-4.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "10 Places You Must Visit Before You Turn 30"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-10.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Conscious Consumerism: Making Better Choices"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-11.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "Streaming Wars: Who’s Winning in 2026?"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-85.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Minimalism in Design: Why Less is Still More"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-4.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "The Global News You Might Have Missed This Week"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-17.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "What’s Trending Around the World Right Now"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-12.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "Cryptocurrency in 2026: Innovation or Illusion?"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-16.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "10 Places You Must Visit Before You Turn 30"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/other/img-other-4.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Culture",
+            "bgBadge": "bg-1",
+            "title": "10 Places You Must Visit Before You Turn 30"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-70.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Education",
+            "bgBadge": "bg-1",
+            "title": "Minimalism in Design: Why Less is Still More"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-100.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Lifestyle",
+            "bgBadge": "bg-1",
+            "title": "The Global News You Might Have Missed This Week"
+        },
+        {
+            "cornerBgColor": "",
+            "img": "/assets/imgs/page/img-101.png",
+            "linkBadge": "#",
+            "linkPost": "/single-3",
+            "badge": "Technology",
+            "bgBadge": "bg-1",
+            "title": "What’s Trending Around the World Right Now"
+        }
+    ]
+}
