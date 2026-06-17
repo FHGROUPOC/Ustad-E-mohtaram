@@ -16,6 +16,7 @@ export default async function Home() {
 
   // ENRICH DATA HERE: Fetch all authors for the blogs we need in Section 9
   const blogsWithAuthors = await Promise.all(
+    
     activeBlogs.slice(0, 10).map(async (blog) => {
       const author = await getAuthorById(blog.authorId);
       const authorName = author?.name || blog.postedby || "Staff";
