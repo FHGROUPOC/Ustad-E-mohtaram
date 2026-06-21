@@ -96,7 +96,7 @@ export default function Section4({ blogs = [] }: { blogs: Blog[] }) {
                   <p className="fs-7 mb-5 text-600">
                     You’ll only receive updates on new articles—no spam,{" "}
                     <br className="d-none d-lg-block" />
-                    just the latest Mixplate Author insights.
+                    just the latest Dar ul Iqaan Author insights.
                   </p>
                 </div>
                 <form className="position-relative" onSubmit={handleSubscribe}>
@@ -253,7 +253,7 @@ export default function Section4({ blogs = [] }: { blogs: Blog[] }) {
                       <ul className="list-unstyled ps-0 m-0 d-flex flex-column gap-3 w-100">
                         <li>
                           <a
-                            href="https://www.facebook.com/MixPlateMagazine"
+                            href="https://www.facebook.com/Dar ul IqaanMagazine"
                             className="social-item fs-7 d-flex align-items-center text-decoration-none text-dark"
                           >
                             {/* <div
@@ -270,7 +270,7 @@ export default function Section4({ blogs = [] }: { blogs: Blog[] }) {
                         </li>
                         <li>
                           <a
-                            href="https://www.instagram.com/mixplatemagazine"
+                            href="https://www.instagram.com/Dar ul Iqaanmagazine"
                             className="social-item fs-7 d-flex align-items-center text-decoration-none text-dark"
                           >
                             {/* <div

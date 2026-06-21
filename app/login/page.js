@@ -59,7 +59,7 @@ export default function LoginPage() {
               <ShieldCheck size={32} className="text-white" />
             </div>
             <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">
-              Mixplate <span className="text-blue-600">CMS</span>
+              Dar ul Iqaan <span className="text-blue-600">CMS</span>
             </h2>
             <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-2">
               Management Portal
@@ -118,7 +118,7 @@ export default function LoginPage() {
           </form>
 
           <p className="text-center text-gray-400 text-[10px] font-medium mt-8 uppercase tracking-widest">
-            Protected by Mixplate Security Protocol
+            Protected by Dar ul Iqaan Security Protocol
           </p>
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function DashboardLayout({ children }) {
       <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-950">
         <Loader2 className="animate-spin text-blue-500 mb-4" size={40} />
         <span className="text-xs font-black text-slate-500 uppercase tracking-[0.3em]">
-          Securing Mixplate Session...
+          Securing Dar ul Iqaan Session...
         </span>
       </div>
     );
@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }) {
             </div>
             <div>
               <h2 className="text-xl font-black tracking-tighter uppercase leading-none">
-                Mixplate <span className="text-blue-500">Blogs</span>
+                Dar ul Iqaan <span className="text-blue-500">Blogs</span>
               </h2>
               <div className="flex items-center gap-1 mt-1">
                 <div className="w-1 h-1 bg-green-500 rounded-full"></div>
@@ -190,7 +190,7 @@ export default function DashboardLayout({ children }) {
         <header className="h-20 bg-white/70 backdrop-blur-xl border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-30">
           <div className="flex items-center gap-4">
             <h1 className="text-sm font-black text-gray-900 uppercase tracking-tighter">
-              Mixplate Control Panel <span className="text-gray-300 mx-2">/</span>{" "}
+              Dar ul Iqaan Control Panel <span className="text-gray-300 mx-2">/</span>{" "}
               <span className="text-blue-600 capitalize">
                 {pathname.split("/").pop() || "Home"}
               </span>

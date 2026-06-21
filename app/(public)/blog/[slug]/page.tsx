@@ -23,20 +23,20 @@ export async function generateMetadata(
 
   if (!blog) {
     return {
-      title: "Post Not Found | Mixplate Magazine",
+      title: "Post Not Found | Dar ul Iqaan Magazine",
     };
   }
 
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `${blog.title} | Mixplate Magazine`,
+    title: `${blog.title} | Dar ul Iqaan Magazine`,
     description: blog.metaDescription || "Expert insights and latest updates.",
     openGraph: {
       title: blog.title,
       description: blog.metaDescription,
       url: `https://multi-blogs-web.vercel.app/blog/${slug}`,
-      siteName: "Mixplate Magazine",
+      siteName: "Dar ul Iqaan Magazine",
       images: [
         {
           url: blog.img || "/assets/imgs/page/default-share.png",
@@ -57,7 +57,7 @@ export async function generateMetadata(
       description: blog.metaDescription,
       images: [blog.img || "/assets/imgs/page/default-share.png"],
     },
-    keywords: [blog.category, "Mixplate", "Lahore", "Expert Tips"],
+    keywords: [blog.category, "Dar ul Iqaan", "Lahore", "Expert Tips"],
   };
 }
 

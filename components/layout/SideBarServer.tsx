@@ -148,7 +148,7 @@ export default function SideBarServer({ blogs = [] }) {
 
         <div className="text-center mt-4">
           <p className="fs-7">
-            2026 Copyright @ <span className="text-dark">Mixplate.</span>{" "}
+            2026 Copyright @ <span className="text-dark">Dar ul Iqaan.</span>{" "}
             <br className="d-none d-lg-block" />
             <span> All Rights Reserved </span>
           </p>

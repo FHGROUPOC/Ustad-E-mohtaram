@@ -83,7 +83,7 @@ export default function SundusMain() {
           <div className="w-full flex items-center justify-between text-neutral-500 font-mono text-[10px] tracking-widest uppercase z-20">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>MIXPLATE MAGAZINE CEO</span>
+              <span>Dar ul Iqaan MAGAZINE CEO</span>
             </div>
             <div>2026 BRAND IDENTITY</div>
           </div>
