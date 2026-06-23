@@ -55,7 +55,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               // Bamped to 1.55rem base size, line-height controlled at tight 1.8 threshold
               const config = getTypographyStyle(
                 current.value,
-                "1.6rem",
+                "1.4rem",
                 "1.8",
               );
               return (
