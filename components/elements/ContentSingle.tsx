@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import React from "react";
 
@@ -27,6 +28,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
   const getTypographyStyle = (
     text: string,
     baseFontSize: string,
+    mobileFontSize: string,
     customLineHeight?: string,
   ) => {
     const isUrdu = isUrduText(text);
@@ -35,12 +37,15 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
         whiteSpace: "pre-line" as const,
         // If Urdu, use custom lowered line height (e.g., 1.8), otherwise standard English format
         lineHeight: isUrdu ? customLineHeight || "1.8" : "1.6",
-        fontSize: baseFontSize,
+        // Using CSS variables to smoothly handle responsive override without losing fallback
+        "--base-fs": baseFontSize,
+        "--mobile-fs": mobileFontSize,
+        fontSize: "var(--dynamic-fs, var(--base-fs))",
         fontFamily: isUrdu
           ? "'Faiz Lahori Nastaleeq', 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif"
           : "inherit",
         wordSpacing: isUrdu ? "2px" : "normal",
-      },
+      } as React.CSSProperties & { [key: string]: string },
       className: isUrdu ? "text-end" : "text-start",
       dir: isUrdu ? ("rtl" as const) : ("ltr" as const),
     };
@@ -48,20 +53,30 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
 
   return (
     <div className="blog-content pb-5">
+      {/* Scope a clean CSS variable override for viewports less than 768px */}
+      <style jsx global>{`
+        @media (max-width: 768px) {
+          .responsive-typography {
+            --dynamic-fs: var(--mobile-fs) !important;
+          }
+        }
+      `}</style>
+
       <div className="article-body">
         {blog.blog_detail.map((current: any, i: number) => {
           switch (current.type) {
             case "description": {
-              // Bamped to 1.55rem base size, line-height controlled at tight 1.8 threshold
+              // Base: 1.6rem -> Mobile: 1.25rem
               const config = getTypographyStyle(
                 current.value,
-                "1.4rem",
+                "1.6rem",
+                "1.25rem",
                 "1.8",
               );
               return (
                 <p
                   key={i}
-                  className={`text-600 mb-4 !mt-2 ${config.className}`}
+                  className={`text-600 mb-4 !mt-2 responsive-typography ${config.className}`}
                   style={config.style}
                   dir={config.dir}
                 >
@@ -71,16 +86,17 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
             }
 
             case "Sub": {
-              // Structured headings
+              // Base: 2.25rem -> Mobile: 1.65rem
               const config = getTypographyStyle(
                 current.value,
                 "2.25rem",
+                "1.65rem",
                 "1.6",
               );
               return (
                 <h3
                   key={i}
-                  className={`fw-bold mt-4 mb-3 text-dark uppercase tracking-tight ${config.className}`}
+                  className={`fw-bold mt-4 mb-3 text-dark uppercase tracking-tight responsive-typography ${config.className}`}
                   style={config.style}
                   dir={config.dir}
                 >
@@ -104,14 +120,18 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               );
 
             case "image-text-side": {
+              // Side Heading Base: 1.95rem -> Mobile: 1.5rem
               const headingConfig = getTypographyStyle(
                 current.sideHeading,
                 "1.95rem",
+                "1.5rem",
                 "1.6",
               );
+              // Side Desc Base: 1.45rem -> Mobile: 1.2rem
               const descConfig = getTypographyStyle(
                 current.sideDescription,
                 "1.45rem",
+                "1.2rem",
                 "1.8",
               );
               const isUrduLayout = isUrduText(current.sideDescription);
@@ -142,7 +162,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                       <div className="ps-lg-2">
                         {current.sideHeading && (
                           <h3
-                            className={`mb-2 mt-0 ${headingConfig.className}`}
+                            className={`mb-2 mt-0 responsive-typography ${headingConfig.className}`}
                             style={headingConfig.style}
                             dir={headingConfig.dir}
                           >
@@ -150,7 +170,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                           </h3>
                         )}
                         <p
-                          className={`mt-2 ${descConfig.className}`}
+                          className={`mt-2 responsive-typography ${descConfig.className}`}
                           style={descConfig.style}
                           dir={descConfig.dir}
                         >
@@ -167,6 +187,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               const config = getTypographyStyle(
                 current.value,
                 "1.55rem",
+                "1.25rem",
                 "1.8",
               );
               const isRtl = config.dir === "rtl";
@@ -187,7 +208,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                     }}
                   ></div>
                   <p
-                    className={`text-dark my-0 flex-grow-1 ${config.className}`}
+                    className={`text-dark my-0 flex-grow-1 responsive-typography ${config.className}`}
                     style={config.style}
                   >
                     {current.value}
@@ -237,12 +258,13 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               const config = getTypographyStyle(
                 current.linkTitle,
                 "1.55rem",
+                "1.25rem",
                 "1.8",
               );
               return (
                 <div
                   key={i}
-                  className={`my-4 ${config.className}`}
+                  className={`my-4 responsive-typography ${config.className}`}
                   dir={config.dir}
                 >
                   <a
@@ -288,12 +310,13 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               const quoteConfig = getTypographyStyle(
                 current.value,
                 "1.8rem",
+                "1.4rem",
                 "1.8",
               );
               return (
                 <blockquote
                   key={i}
-                  className={` p-4 border-start border-4 border-primary bg-light rounded ${quoteConfig.className}`}
+                  className={`blockquote p-4 border-start border-4 border-primary bg-light rounded responsive-typography ${quoteConfig.className}`}
                   dir={quoteConfig.dir}
                 >
                   <p
