@@ -70,7 +70,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               const config = getTypographyStyle(
                 current.value,
                 "1.6rem",
-                "1.25rem",
+                "1rem",
                 "1.8",
               );
               return (
@@ -187,7 +187,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               const config = getTypographyStyle(
                 current.value,
                 "1.55rem",
-                "1.25rem",
+                "1rem",
                 "1.8",
               );
               const isRtl = config.dir === "rtl";
@@ -258,7 +258,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               const config = getTypographyStyle(
                 current.linkTitle,
                 "1.55rem",
-                "1.25rem",
+                "1rem",
                 "1.8",
               );
               return (
