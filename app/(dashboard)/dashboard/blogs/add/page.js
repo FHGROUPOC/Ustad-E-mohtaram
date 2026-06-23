@@ -18,6 +18,9 @@ const AddBlog = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // --- Categories State ---
+  const [dbCategories, setDbCategories] = useState([]);
+
   // --- Main Form State ---
   const [heading, setHeading] = useState("");
   const [writer, setWriter] = useState("");
@@ -32,6 +35,7 @@ const AddBlog = () => {
   const [morefields, setMoreFields] = useState([]);
   const [scheduledDate, setScheduledDate] = useState("");
 
+  // Handle Authentication and Dynamic Category Fetching
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
@@ -43,7 +47,28 @@ const AddBlog = () => {
       }
       setCurrentUser(user);
       setWriter(user.name);
-      setLoading(false);
+
+      // Fetch categories dynamically from database endpoint
+      const fetchCategories = async () => {
+        try {
+          const res = await fetch("/api/categories");
+          const data = await res.json();
+          if (data.success) {
+            setDbCategories(data.categories || []);
+          } else {
+            toast.error(
+              "Could not load categories collection configuration profile",
+            );
+          }
+        } catch (err) {
+          console.error("Categories Fetch Error:", err);
+          toast.error("Network error fetching server configurations");
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchCategories();
     } else {
       router.push("/login");
     }
@@ -90,7 +115,6 @@ const AddBlog = () => {
     }
   };
 
-  // 1. Handle the end of a drag event
   const onDragEnd = (result) => {
     if (!result.destination) return;
 
@@ -102,7 +126,6 @@ const AddBlog = () => {
   };
 
   const renderField = (field, index) => {
-    // Increased contrast on common inputs
     const commonInputClass =
       "w-full p-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-blue-600 outline-none placeholder-gray-500 text-gray-900 text-sm bg-white";
 
@@ -208,8 +231,8 @@ const AddBlog = () => {
                   updateNestedField(index, "imageUrl", res.info.secure_url);
                 }}
                 options={{
-                  clientAllowedFormats: ["webp"], // Restricts the file picker
-                  sources: ["local", "url"], // Optional: limit where they get images
+                  clientAllowedFormats: ["webp"],
+                  sources: ["local", "url"],
                 }}
               >
                 Upload Image
@@ -243,8 +266,8 @@ const AddBlog = () => {
                 uploadPreset="Blogs_Images"
                 className="h-40 bg-gray-200 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-500 overflow-hidden hover:bg-gray-300 transition-colors"
                 options={{
-                  clientAllowedFormats: ["webp"], // Restricts the file picker
-                  sources: ["local", "url"], // Optional: limit where they get images
+                  clientAllowedFormats: ["webp"],
+                  sources: ["local", "url"],
                 }}
                 onSuccess={(res) => {
                   if (res.info.format !== "webp") {
@@ -306,8 +329,8 @@ const AddBlog = () => {
                 <CldUploadButton
                   key={idx}
                   options={{
-                    clientAllowedFormats: ["webp"], // Restricts the file picker
-                    sources: ["local", "url"], // Optional: limit where they get images
+                    clientAllowedFormats: ["webp"],
+                    sources: ["local", "url"],
                   }}
                   uploadPreset="Blogs_Images"
                   className="h-28 bg-white rounded border-2 border-dashed border-gray-400 flex items-center justify-center overflow-hidden hover:bg-gray-100 transition-colors"
@@ -476,25 +499,11 @@ const AddBlog = () => {
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Choose One</option>
-                  <option value="lifestyle">Lifestyle</option>
-                  <option value="business">Business</option>
-                  <option value="technology">Technology</option>
-                  <option value="travel">Travel</option>
-                  <option value="entertainment">Entertainment</option>
-                  <option value="education">Education</option>
-                  <option value="finance">Finance</option>
-                  <option value="culture">Culture</option>
-                  <option value="sports">Sports</option>
-                  <option value="science">Science</option>
-                  <option value="environment">Environment</option>
-                  <option value="opinion">Opinion</option>
-                  <option value="reviews">Reviews</option>
-                  <option value="guides">Guides</option>
-                  <option value="events">Events</option>
-                  <option value="health-wellness">Health & Wellness</option>
-                  <option value="food-drink">Food & Drink</option>
-                  <option value="news-politics">News & Politics</option>
-                  <option value="fashion-beauty">Fashion & Beauty</option>
+                  {dbCategories.map((cat) => (
+                    <option key={cat._id} value={cat.name}>
+                      {cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -550,17 +559,25 @@ const AddBlog = () => {
                 </div>
               )}
             </div>
-            <CldUploadButton
-              options={{
-                clientAllowedFormats: ["webp"], // Restricts the file picker
-                sources: ["local", "url"], // Optional: limit where they get images
-              }}
-              uploadPreset="Blogs_Images"
-              className="w-full bg-indigo-700 text-white py-4 rounded-xl font-black hover:bg-indigo-800 shadow-xl transition-all uppercase text-sm"
-              onSuccess={(e) => setimage(e.info.secure_url)}
-            >
-              Pick Banner Image
-            </CldUploadButton>
+            <div className="space-y-2">
+              <input
+                className="w-full p-2 border border-gray-400 rounded-lg placeholder-gray-500 text-gray-900 text-xs"
+                placeholder="Main image alt text..."
+                value={bannerAlt}
+                onChange={(e) => setBannerAlt(e.target.value)}
+              />
+              <CldUploadButton
+                options={{
+                  clientAllowedFormats: ["webp"],
+                  sources: ["local", "url"],
+                }}
+                uploadPreset="Blogs_Images"
+                className="w-full bg-indigo-700 text-white py-4 rounded-xl font-black hover:bg-indigo-800 shadow-xl transition-all uppercase text-sm"
+                onSuccess={(e) => setimage(e.info.secure_url)}
+              >
+                Pick Banner Image
+              </CldUploadButton>
+            </div>
 
             <div className="space-y-4">
               <div className="p-4 border border-gray-300 rounded-2xl bg-white shadow-sm">
@@ -646,7 +663,6 @@ const AddBlog = () => {
                           {...provided.draggableProps}
                           className="group flex items-start gap-2"
                         >
-                          {/* 3. Drag Handle */}
                           <div
                             {...provided.dragHandleProps}
                             className="mt-4 p-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-blue-600 transition-colors"
@@ -654,7 +670,6 @@ const AddBlog = () => {
                             <MdDragIndicator size={24} />
                           </div>
 
-                          {/* Your existing renderField logic */}
                           <div className="flex-1">
                             {renderField(field, index)}
                           </div>

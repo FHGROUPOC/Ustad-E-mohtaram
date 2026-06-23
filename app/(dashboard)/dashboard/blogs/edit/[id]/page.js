@@ -21,6 +21,7 @@ const EditBlog = () => {
   const [heading, setHeading] = useState("");
   const [writer, setWriter] = useState("");
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]); // Kept initialized as an array
   const [url, setUrl] = useState("");
   const [description, setDescription] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
@@ -42,20 +43,40 @@ const EditBlog = () => {
     }
   };
 
-  // 1. Fetch Data
+  // 1. Fetch Data (Blog Details + Dynamic Categories)
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       const user = JSON.parse(savedUser);
       setCurrentUser(user);
 
-      const fetchBlogData = async () => {
+      const fetchData = async () => {
         try {
-          const res = await fetch(`/api/blogs/${id}`);
-          if (res.ok) {
-            const data = await res.json();
+          const [blogRes, categoriesRes] = await Promise.all([
+            fetch(`/api/blogs/${id}`),
+            fetch("/api/categories")
+          ]);
 
-            // Permissions
+          if (categoriesRes.ok) {
+            const catData = await categoriesRes.json();
+            
+            // Safeguard: Ensure catData is truly an array before setting state
+            if (Array.isArray(catData)) {
+              setCategories(catData);
+            } else if (catData && Array.isArray(catData.categories)) {
+              // Fallback if the backend wraps the array in an object: { categories: [...] }
+              setCategories(catData.categories);
+            } else if (catData && typeof catData === "object") {
+              // Fallback if backend returns an object map instead of an array
+              setCategories(Object.values(catData));
+            } else {
+              setCategories([]);
+            }
+          }
+
+          if (blogRes.ok) {
+            const data = await blogRes.json();
+
             if (user.role === "AUTHOR" && data.authorId !== user.id) {
               toast.error("Access Denied.");
               router.push("/dashboard/blogs");
@@ -72,10 +93,9 @@ const EditBlog = () => {
             setimage(data.img);
             setFields(data.tags || []);
 
-            // Add unique IDs for drag-and-drop tracking
             const blocksWithIds = (data.blog_detail || []).map((block, i) => ({
               ...block,
-              id: `block-${i}-${Date.now()}`,
+              id: block.id || `block-${i}-${Date.now()}`,
             }));
             setMoreFields(blocksWithIds);
 
@@ -84,13 +104,14 @@ const EditBlog = () => {
                 new Date(data.scheduledAt).toISOString().slice(0, 16),
               );
             }
-            setLoading(false);
           }
+          setLoading(false);
         } catch (err) {
-          toast.error("Error loading blog");
+          toast.error("Error loading setup data");
+          setLoading(false);
         }
       };
-      fetchBlogData();
+      fetchData();
     } else {
       router.push("/login");
     }
@@ -155,7 +176,6 @@ const EditBlog = () => {
       return toast.error("Essential fields are missing.");
     }
     try {
-      // Remove temp IDs before saving
       const cleanFields = morefields.map(({ id, ...rest }) => rest);
 
       const payload = {
@@ -204,7 +224,7 @@ const EditBlog = () => {
               <textarea
                 rows={3}
                 className={commonInputClass}
-                value={field.value}
+                value={field.value || ""}
                 onChange={(e) =>
                   updateNestedField(index, "value", e.target.value)
                 }
@@ -213,14 +233,14 @@ const EditBlog = () => {
               <input
                 type="text"
                 className={commonInputClass}
-                value={field.value}
+                value={field.value || ""}
                 onChange={(e) =>
                   updateNestedField(index, "value", e.target.value)
                 }
               />
             )}
             <button
-              className="bg-red-600 text-white p-2 rounded-md"
+              className="bg-red-600 text-white p-2 rounded-md transition-colors hover:bg-red-700"
               onClick={() => handleRemoveField(index)}
             >
               ✕
@@ -230,10 +250,7 @@ const EditBlog = () => {
 
       case "hyperlink":
         return (
-          <div
-            key={index}
-            className="flex flex-col md:flex-row items-center gap-3 w-full mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl relative"
-          >
+          <div className="flex flex-col md:flex-row items-center gap-3 w-full p-4 bg-indigo-50 border border-indigo-200 rounded-xl relative">
             <div className="flex-1 w-full">
               <label className="text-[9px] font-black text-indigo-400 uppercase">
                 Link Text
@@ -242,7 +259,7 @@ const EditBlog = () => {
                 type="text"
                 placeholder="e.g. Read More"
                 className={commonInputClass}
-                value={field.linkTitle}
+                value={field.linkTitle || ""}
                 onChange={(e) =>
                   updateNestedField(index, "linkTitle", e.target.value)
                 }
@@ -256,14 +273,14 @@ const EditBlog = () => {
                 type="text"
                 placeholder="https://..."
                 className={commonInputClass}
-                value={field.linkUrl}
+                value={field.linkUrl || ""}
                 onChange={(e) =>
                   updateNestedField(index, "linkUrl", e.target.value)
                 }
               />
             </div>
             <button
-              className="bg-red-600 text-white p-2 rounded-lg shrink-0 mt-4 md:mt-0"
+              className="bg-red-600 text-white p-2 rounded-lg shrink-0 mt-4 md:mt-0 transition-colors hover:bg-red-700"
               onClick={() => handleRemoveField(index)}
             >
               ✕
@@ -277,11 +294,12 @@ const EditBlog = () => {
               <img
                 src={field.imageUrl}
                 className="w-16 h-16 object-cover rounded shadow"
+                alt={field.value || "Single block field layout asset"}
               />
             )}
             <CldUploadButton
               uploadPreset="Blogs_Images"
-              className="bg-gray-800 text-white px-3 py-1 rounded text-xs font-bold"
+              className="bg-gray-800 text-white px-3 py-1 rounded text-xs font-bold transition-colors hover:bg-gray-900"
               onSuccess={(res) =>
                 updateNestedField(index, "imageUrl", res.info.secure_url)
               }
@@ -291,13 +309,13 @@ const EditBlog = () => {
             <input
               className={commonInputClass}
               placeholder="Alt tag..."
-              value={field.value}
+              value={field.value || ""}
               onChange={(e) =>
                 updateNestedField(index, "value", e.target.value)
               }
             />
             <button
-              className="bg-red-600 text-white p-2 rounded-md"
+              className="bg-red-600 text-white p-2 rounded-md transition-colors hover:bg-red-700"
               onClick={() => handleRemoveField(index)}
             >
               ✕
@@ -313,31 +331,32 @@ const EditBlog = () => {
                 <div key={i} className="space-y-2">
                   <CldUploadButton
                     uploadPreset="Blogs_Images"
-                    className="w-full h-24 bg-white rounded border-2 border-dashed border-gray-400 overflow-hidden"
+                    className="w-full h-24 bg-white rounded border-2 border-dashed border-gray-400 overflow-hidden flex items-center justify-center"
                     onSuccess={(res) =>
                       updateDoubleImage(index, i, res.info.secure_url)
                     }
                   >
-                    {field.imageUrls[i] ? (
+                    {field.imageUrls?.[i] ? (
                       <img
                         src={field.imageUrls[i]}
                         className="w-full h-full object-cover"
+                        alt={field.alts?.[i] || ""}
                       />
                     ) : (
-                      <PiImages className="mx-auto" />
+                      <PiImages className="mx-auto text-gray-400" size={24} />
                     )}
                   </CldUploadButton>
                   <input
                     className="w-full p-1 text-[10px] border border-gray-300 rounded"
                     placeholder="Alt"
-                    value={field.alts[i]}
+                    value={field.alts?.[i] || ""}
                     onChange={(e) => updateDoubleAlt(index, i, e.target.value)}
                   />
                 </div>
               ))}
             </div>
             <button
-              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs"
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center transition-colors hover:bg-red-700"
               onClick={() => handleRemoveField(index)}
             >
               ✕
@@ -351,7 +370,7 @@ const EditBlog = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <CldUploadButton
                 uploadPreset="Blogs_Images"
-                className="h-32 bg-gray-200 rounded border-2 border-dashed border-gray-500 overflow-hidden"
+                className="h-32 bg-gray-200 rounded border-2 border-dashed border-gray-500 overflow-hidden flex items-center justify-center"
                 onSuccess={(res) =>
                   updateNestedField(index, "imageUrl", res.info.secure_url)
                 }
@@ -360,16 +379,17 @@ const EditBlog = () => {
                   <img
                     src={field.imageUrl}
                     className="w-full h-full object-cover"
+                    alt={field.sideHeading || "Side text arrangement preview"}
                   />
                 ) : (
-                  <PiImage className="mx-auto" />
+                  <PiImage className="mx-auto text-gray-400" size={24} />
                 )}
               </CldUploadButton>
               <div className="space-y-2">
                 <input
                   className={commonInputClass}
                   placeholder="Heading"
-                  value={field.sideHeading}
+                  value={field.sideHeading || ""}
                   onChange={(e) =>
                     updateNestedField(index, "sideHeading", e.target.value)
                   }
@@ -377,7 +397,7 @@ const EditBlog = () => {
                 <textarea
                   className={commonInputClass}
                   rows={2}
-                  value={field.sideDescription}
+                  value={field.sideDescription || ""}
                   onChange={(e) =>
                     updateNestedField(index, "sideDescription", e.target.value)
                   }
@@ -385,7 +405,7 @@ const EditBlog = () => {
               </div>
             </div>
             <button
-              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs"
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center transition-colors hover:bg-red-700"
               onClick={() => handleRemoveField(index)}
             >
               ✕
@@ -396,13 +416,12 @@ const EditBlog = () => {
       case "quote":
         return (
           <div className="border-l-8 border-black p-5 bg-gray-100 flex gap-4 items-start relative w-full shadow-md">
-            {/* Icon changed to pure black */}
             <LuQuote size={28} className="text-black shrink-0" />
             <div className="flex-1">
               <textarea
-                className="w-full bg-transparent outline-none italic font-serif text-black text-lg font-bold placeholder-gray-500"
+                className="w-full bg-transparent outline-none italic font-serif text-black text-lg font-bold placeholder-gray-500 resize-none"
                 placeholder="Quote content..."
-                value={field.value}
+                value={field.value || ""}
                 onChange={(e) =>
                   updateNestedField(index, "value", e.target.value)
                 }
@@ -410,14 +429,14 @@ const EditBlog = () => {
               <input
                 className="w-full text-xs font-black uppercase text-black mt-2 bg-transparent outline-none"
                 placeholder="Author name"
-                value={field.author}
+                value={field.author || ""}
                 onChange={(e) =>
                   updateNestedField(index, "author", e.target.value)
                 }
               />
             </div>
             <button
-              className="text-red-600 hover:text-red-800 font-bold"
+              className="text-red-600 hover:text-red-800 font-bold transition-colors"
               onClick={() => handleRemoveField(index)}
             >
               ✕
@@ -431,7 +450,7 @@ const EditBlog = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center font-black bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center font-black bg-gray-100 tracking-widest text-lg">
         LOADING...
       </div>
     );
@@ -447,12 +466,15 @@ const EditBlog = () => {
               Edit Article
             </h2>
             <p className="text-gray-700 text-sm mt-1 font-bold uppercase tracking-tighter">
-              ID: <span className="text-blue-700">#{id.slice(-6)}</span>
+              ID:{" "}
+              <span className="text-blue-700">
+                #{typeof id === "string" ? id.slice(-6) : ""}
+              </span>
             </p>
           </div>
           <button
             onClick={() => router.back()}
-            className="text-gray-600 hover:text-black font-black text-xs uppercase underline tracking-widest"
+            className="text-gray-600 hover:text-black font-black text-xs uppercase underline tracking-widest transition-colors"
           >
             Go Back
           </button>
@@ -473,30 +495,24 @@ const EditBlog = () => {
                   Category
                 </label>
                 <select
-                  className="w-full p-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none bg-white text-gray-900 font-bold"
+                  className="w-full p-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-600 outline-none bg-white text-gray-900 font-bold capitalize"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Choose One</option>
-                  <option value="lifestyle">Lifestyle</option>
-                  <option value="business">Business</option>
-                  <option value="technology">Technology</option>
-                  <option value="travel">Travel</option>
-                  <option value="entertainment">Entertainment</option>
-                  <option value="education">Education</option>
-                  <option value="finance">Finance</option>
-                  <option value="culture">Culture</option>
-                  <option value="sports">Sports</option>
-                  <option value="science">Science</option>
-                  <option value="environment">Environment</option>
-                  <option value="opinion">Opinion</option>
-                  <option value="reviews">Reviews</option>
-                  <option value="guides">Guides</option>
-                  <option value="events">Events</option>
-                  <option value="health-wellness">Health & Wellness</option>
-                  <option value="food-drink">Food & Drink</option>
-                  <option value="news-politics">News & Politics</option>
-                  <option value="fashion-beauty">Fashion & Beauty</option>
+                  {/* Inline safeguard `(categories || [])` guarantees a valid array sequence */}
+                  {(categories || []).map((cat) => {
+                    const catSlug = cat.slug || cat.value || cat;
+                    const catName = cat.name || cat.label || cat;
+                    return (
+                      <option key={catSlug} value={catSlug}>
+                        {catName}
+                      </option>
+                    );
+                  })}
+                  {category && !(categories || []).some(c => (c.slug || c.value || c) === category) && (
+                    <option value={category}>{category}</option>
+                  )}
                 </select>
               </div>
               <div>
@@ -541,7 +557,7 @@ const EditBlog = () => {
                 <img
                   src={image}
                   className="w-full h-full object-cover"
-                  alt="banner"
+                  alt={bannerAlt || "Main blog publication banner illustration"}
                 />
               ) : (
                 <PiImage size={40} className="text-gray-300" />
@@ -549,11 +565,12 @@ const EditBlog = () => {
             </div>
             <CldUploadButton
               uploadPreset="Blogs_Images"
-              className="w-full bg-indigo-700 text-white py-4 rounded-xl font-black hover:bg-indigo-800 shadow-xl uppercase text-sm"
+              className="w-full bg-indigo-700 text-white py-4 rounded-xl font-black hover:bg-indigo-800 shadow-xl uppercase text-sm transition-colors"
               onSuccess={(e) => setimage(e.info.secure_url)}
             >
               Update Banner
             </CldUploadButton>
+
             <div className="space-y-4">
               <div className="p-4 border border-gray-300 rounded-2xl bg-white shadow-sm">
                 <label className="text-[10px] font-black text-gray-600 uppercase mb-3 block tracking-widest">
@@ -565,9 +582,9 @@ const EditBlog = () => {
                       key={i}
                       className="bg-gray-800 text-white text-[10px] font-black px-2 py-1 rounded-md flex items-center gap-1 uppercase"
                     >
-                      {tag}{" "}
+                      {tag}
                       <button
-                        className="text-red-400 hover:text-red-500 ml-1"
+                        className="text-red-400 hover:text-red-500 ml-1 font-bold"
                         onClick={() =>
                           setFields(fields.filter((_, idx) => idx !== i))
                         }
@@ -585,7 +602,7 @@ const EditBlog = () => {
                     placeholder="fade, styles..."
                   />
                   <button
-                    className="bg-black text-white px-4 py-1 rounded-lg text-xs font-bold"
+                    className="bg-black text-white px-4 py-1 rounded-lg text-xs font-bold transition-colors hover:bg-gray-900"
                     onClick={handleAddTag}
                   >
                     Add
@@ -593,17 +610,6 @@ const EditBlog = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="p-4 bg-gray-900 rounded-2xl border-t-4 border-blue-500 shadow-lg">
-              <label className="text-[10px] font-black text-gray-400 uppercase mb-2 block">
-                Schedule Publication
-              </label>
-              <input
-                type="datetime-local"
-                className="w-full bg-gray-800 text-white p-2 rounded-lg text-sm outline-none border border-gray-700"
-                value={scheduledDate}
-                onChange={(e) => setScheduledDate(e.target.value)}
-              />
-            </div> */}
           </div>
         </div>
 
@@ -634,11 +640,11 @@ const EditBlog = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          className="flex items-start gap-2 group"
+                          className="flex items-start gap-2 group bg-white p-1 rounded-lg"
                         >
                           <div
                             {...provided.dragHandleProps}
-                            className="mt-2 p-1 text-gray-400 hover:text-blue-600 cursor-grab active:cursor-grabbing"
+                            className="mt-2 p-1 text-gray-400 hover:text-blue-600 cursor-grab active:cursor-grabbing transition-colors"
                           >
                             <MdDragIndicator size={24} />
                           </div>
@@ -686,10 +692,13 @@ const EditBlog = () => {
               ].map((btn) => (
                 <button
                   key={btn.type}
-                  className="flex flex-col items-center justify-center w-20 h-20 bg-white border-2 border-gray-300 rounded-2xl hover:border-blue-600 transition-all shadow-sm"
+                  type="button"
+                  className="flex flex-col items-center justify-center w-20 h-20 bg-white border-2 border-gray-300 rounded-2xl hover:border-blue-600 transition-all shadow-sm group"
                   onClick={() => addField(btn.type)}
                 >
-                  <span className="text-xl text-gray-800">{btn.icon}</span>
+                  <span className="text-xl text-gray-800 transition-transform group-hover:scale-110">
+                    {btn.icon}
+                  </span>
                   <span className="text-[10px] mt-1 font-black uppercase text-gray-700">
                     {btn.label}
                   </span>
@@ -703,7 +712,7 @@ const EditBlog = () => {
         <div className="mt-16 border-t-2 border-gray-200 pt-10 flex justify-between items-center">
           <button
             onClick={() => router.back()}
-            className="text-gray-600 hover:text-red-600 font-black uppercase text-xs tracking-widest"
+            className="text-gray-600 hover:text-red-600 font-black uppercase text-xs tracking-widest transition-colors"
           >
             Discard Changes
           </button>
