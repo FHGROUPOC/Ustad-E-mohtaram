@@ -23,14 +23,14 @@ const BlogSchema = new mongoose.Schema(
         name: String,
         email: String,
         message: String,
-        status: { type: String, default: "Active" },
+        status: { type: String, default: "pending" },
         replies: [
           {
             img: String,
             name: String,
             email: String,
             message: String,
-            status: { type: String, default: "Active" },
+            status: { type: String, default: "pending" },
             postedAt: { type: Date, default: Date.now },
           },
         ],
@@ -40,7 +40,7 @@ const BlogSchema = new mongoose.Schema(
     status: {
     type: String,
     enum: ["pending", "scheduled", "active"],
-    default: "pending",
+    default: "active",
   },
     scheduledAt: {
       type: Date,
