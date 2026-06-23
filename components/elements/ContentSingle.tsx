@@ -16,37 +16,78 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
     return match && match[2].length === 11 ? match[2] : null;
   };
 
+  // Helper to detect if a string contains Urdu/Arabic script characters
+  const isUrduText = (text: string): boolean => {
+    if (!text) return false;
+    const urduRegex = /[\u0600-\u06FF]/;
+    return urduRegex.test(text);
+  };
+
+  // Utility matching UrduPoint typography scaling with compacted line layouts
+  const getTypographyStyle = (
+    text: string,
+    baseFontSize: string,
+    customLineHeight?: string,
+  ) => {
+    const isUrdu = isUrduText(text);
+    return {
+      style: {
+        whiteSpace: "pre-line" as const,
+        // If Urdu, use custom lowered line height (e.g., 1.8), otherwise standard English format
+        lineHeight: isUrdu ? customLineHeight || "1.8" : "1.6",
+        fontSize: baseFontSize,
+        fontFamily: isUrdu
+          ? "'Faiz Lahori Nastaleeq', 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif"
+          : "inherit",
+        wordSpacing: isUrdu ? "2px" : "normal",
+      },
+      className: isUrdu ? "text-end" : "text-start",
+      dir: isUrdu ? ("rtl" as const) : ("ltr" as const),
+    };
+  };
+
   return (
     <div className="blog-content pb-5">
-      {/* Dynamic Content Blocks */}
       <div className="article-body">
         {blog.blog_detail.map((current: any, i: number) => {
           switch (current.type) {
-            case "description":
+            case "description": {
+              // Bamped to 1.55rem base size, line-height controlled at tight 1.8 threshold
+              const config = getTypographyStyle(
+                current.value,
+                "1.6rem",
+                "1.8",
+              );
               return (
                 <p
                   key={i}
-                  className="text-600 mb-4 !mt-2"
-                  style={{
-                    whiteSpace: "pre-line",
-                    lineHeight: "1.5",
-                    // fontSize: "0.9rem",
-                  }}
+                  className={`text-600 mb-4 !mt-2 ${config.className}`}
+                  style={config.style}
+                  dir={config.dir}
                 >
                   {current.value}
                 </p>
               );
+            }
 
-            case "Sub":
+            case "Sub": {
+              // Structured headings
+              const config = getTypographyStyle(
+                current.value,
+                "2.25rem",
+                "1.6",
+              );
               return (
                 <h3
                   key={i}
-                  className="fw-bold mt-3 mb-3 text-dark uppercase tracking-tight"
-                  style={{ whiteSpace: "pre-line", fontSize: "2rem" }}
+                  className={`fw-bold mt-4 mb-3 text-dark uppercase tracking-tight ${config.className}`}
+                  style={config.style}
+                  dir={config.dir}
                 >
                   {current.value}
                 </h3>
               );
+            }
 
             case "single-image":
               return (
@@ -59,19 +100,27 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                     className="rounded-16 img-fluid shadow-lg"
                     style={{ height: "100%" }}
                   />
-                  {/* {current.value && (
-                    <p className="fs-9 text-muted mt-3 italic text-center text-uppercase tracking-widest">
-                      // {current.value}
-                    </p>
-                  )} */}
                 </div>
               );
 
-            case "image-text-side":
+            case "image-text-side": {
+              const headingConfig = getTypographyStyle(
+                current.sideHeading,
+                "1.95rem",
+                "1.6",
+              );
+              const descConfig = getTypographyStyle(
+                current.sideDescription,
+                "1.45rem",
+                "1.8",
+              );
+              const isUrduLayout = isUrduText(current.sideDescription);
+
               return (
-                <div key={i} className="my-3">
-                  <div className="row g-4 align-items-center">
-                    {/* Left Column: Image */}
+                <div key={i} className="my-4">
+                  <div
+                    className={`row g-4 align-items-center ${isUrduLayout ? "flex-row-reverse" : ""}`}
+                  >
                     <div className="col-lg-6 col-md-6">
                       <div className="position-relative overflow-hidden rounded-16 shadow-lg">
                         <Image
@@ -89,55 +138,46 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                       </div>
                     </div>
 
-                    {/* Right Column: Text */}
                     <div className="col-lg-6 col-md-6">
                       <div className="ps-lg-2">
                         {current.sideHeading && (
                           <h3
-                            className="mb-0 mt-0"
-                            style={{
-                              whiteSpace: "pre-line",
-                              // lineHeight: "1.5",
-                              fontSize: "1.7rem",
-                            }}
+                            className={`mb-2 mt-0 ${headingConfig.className}`}
+                            style={headingConfig.style}
+                            dir={headingConfig.dir}
                           >
                             {current.sideHeading}
                           </h3>
                         )}
-                        <p className="mt-2">{current.sideDescription}</p>
+                        <p
+                          className={`mt-2 ${descConfig.className}`}
+                          style={descConfig.style}
+                          dir={descConfig.dir}
+                        >
+                          {current.sideDescription}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               );
-              return (
-                <div key={i} className="my-5 clearfix">
-                  <div
-                    className="float-start me-4 mb-3"
-                    style={{ width: "45%" }}
-                  >
-                    <div className="position-relative overflow-hidden rounded-16 shadow-sm">
-                      <Image
-                        src={current.imageUrl}
-                        alt={current.sideHeading || "side image"}
-                        width={600}
-                        height={450}
-                        className="img-fluid w-100 object-fit-cover"
-                        style={{ borderRadius: "16px", display: "block" }}
-                      />
-                    </div>
-                  </div>
-                  <div className="side-content-text">
-                    {current.sideHeading && <h3>{current.sideHeading}</h3>}
-                    <p>{current.sideDescription}</p>
-                  </div>
-                </div>
+            }
+
+            case "bullet": {
+              const config = getTypographyStyle(
+                current.value,
+                "1.55rem",
+                "1.8",
               );
-            case "bullet":
+              const isRtl = config.dir === "rtl";
               return (
-                <div key={i} className="d-flex align-items-start gap-3 my-3 ">
+                <div
+                  key={i}
+                  className={`d-flex align-items-start gap-3 my-3 ${isRtl ? "flex-row-reverse" : ""}`}
+                  dir={config.dir}
+                >
                   <div
-                    className="mt-2"
+                    className="mt-3"
                     style={{
                       width: "8px",
                       height: "8px",
@@ -146,13 +186,17 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                       flexShrink: 0,
                     }}
                   ></div>
-                  <p className="text-dark my-0" style={{ fontSize: "1.1rem" }}>
+                  <p
+                    className={`text-dark my-0 flex-grow-1 ${config.className}`}
+                    style={config.style}
+                  >
                     {current.value}
                   </p>
                 </div>
               );
+            }
 
-            case "youtube":
+            case "youtube": {
               const vidId = getYouTubeId(current.value);
               return vidId ? (
                 <div
@@ -169,6 +213,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                   ></iframe>
                 </div>
               ) : null;
+            }
 
             case "double-image":
               return (
@@ -187,48 +232,37 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                   ))}
                 </div>
               );
-            case "hyperlink":
-              return (
-                <div key={i} className="my-6">
-                  <a
-                    href={current.linkUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center font-bold text-gray-900 no-underline transition-all duration-300 ease-in-out hover:text-blue-600"
-                    style={{ fontSize: "1.125rem" }}
-                  >
-                    <span className=" transition-all duration-300">
-                      {current.linkTitle || "Read More"}
-                    </span>
 
-                    <svg
-                      className="ml-2 transform transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 text-gray-400 group-hover:text-blue-600"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M7 17l9.2-9.2M17 17V7H7" />
-                    </svg>
-                  </a>
-                </div>
+            case "hyperlink": {
+              const config = getTypographyStyle(
+                current.linkTitle,
+                "1.55rem",
+                "1.8",
               );
               return (
-                <div key={i} className="my-4">
+                <div
+                  key={i}
+                  className={`my-4 ${config.className}`}
+                  dir={config.dir}
+                >
                   <a
                     href={current.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="d-inline-flex align-items-center fw-bold text-primary text-decoration-none border-primary pb-1"
-                    style={{ fontSize: "1.1rem transition: all 0.3s" }}
+                    style={{ ...config.style, transition: "all 0.3s" }}
                   >
-                    {current.linkTitle || "Read More"}
+                    {config.dir === "ltr" && (
+                      <span className="me-2">
+                        {current.linkTitle || "Read More"}
+                      </span>
+                    )}
                     <svg
-                      className="ms-2"
+                      className={
+                        config.dir === "rtl"
+                          ? "me-2 transform rotate-180"
+                          : "ms-2"
+                      }
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -240,20 +274,41 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                     >
                       <path d="M7 17l9.2-9.2M17 17V7H7" />
                     </svg>
+                    {config.dir === "rtl" && (
+                      <span className="ms-2">
+                        {current.linkTitle || "مزید پڑھیں"}
+                      </span>
+                    )}
                   </a>
                 </div>
               );
-            case "quote":
+            }
+
+            case "quote": {
+              const quoteConfig = getTypographyStyle(
+                current.value,
+                "1.8rem",
+                "1.8",
+              );
               return (
-                <blockquote key={i} className="blockquote">
-                  <p className="text-dark m-0 fs-22 fw-medium">
+                <blockquote
+                  key={i}
+                  className={` p-4 border-start border-4 border-primary bg-light rounded ${quoteConfig.className}`}
+                  dir={quoteConfig.dir}
+                >
+                  <p
+                    className="text-dark m-0 fw-medium"
+                    style={quoteConfig.style}
+                  >
                     {current.value}
                   </p>
-                  <p className="fs-7 mb-0">
-                    By <span className="text-dark">{current.author}</span>
+                  <p className="fs-7 mb-0 mt-2 text-muted">
+                    By{" "}
+                    <span className="text-dark fw-bold">{current.author}</span>
                   </p>
                 </blockquote>
               );
+            }
 
             default:
               return null;
