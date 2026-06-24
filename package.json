@@ -16,6 +16,7 @@
         "@tailwindcss/postcss": "^4.2.0",
         "bcryptjs": "^3.0.3",
         "bootstrap": "^5.3.3",
+        "dotenv": "^17.4.2",
         "gsap": "^3.12.7",
         "howler": "^2.2.4",
         "isotope-layout": "^3.0.6",

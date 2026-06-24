@@ -49,7 +49,7 @@ export async function POST(req) {
       blog_detail,
       scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
       // CHANGE 1: Every new blog starts as 'pending' for manager review
-      status: "pending",
+      status: "active",
     });
 
     return NextResponse.json(

@@ -14,11 +14,15 @@ import {
   Linkedin,
   Youtube,
   Globe,
+  Layers,
+  Plus,
+  Trash2,
 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function SettingsPage() {
   const fileInputRef = useRef(null);
+  const [userRole, setUserRole] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     image: "",
@@ -35,6 +39,11 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  // Categories States
+  const [categories, setCategories] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [categoryLoading, setCategoryLoading] = useState(false);
+
   // Cropper States
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -44,8 +53,19 @@ export default function SettingsPage() {
 
   // Initialize: Fetch User from LocalStorage and DB
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) fetchProfile(user.id);
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      const parsedUser = JSON.parse(savedUser);
+      setUserRole(parsedUser.role || ""); // Keeping the exact string casing from layout
+      fetchProfile(parsedUser.id);
+
+      // Match exactly against your dashboard layout's uppercase role system
+      if (parsedUser.role === "SUPER_ADMIN") {
+        fetchCategories();
+      }
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const fetchProfile = async (id) => {
@@ -53,7 +73,6 @@ export default function SettingsPage() {
       const res = await fetch(`/api/authors/${id}`);
       const data = await res.json();
       if (data.success) {
-        // We spread the data and ensure socials object exists to avoid controlled/uncontrolled errors
         setFormData({
           ...data.author,
           socials: {
@@ -69,6 +88,69 @@ export default function SettingsPage() {
       toast.error("Failed to load profile");
     } finally {
       setLoading(false);
+    }
+  };
+
+  // --- Category APIs ---
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const data = await res.json();
+      if (data.success) {
+        setCategories(data.categories || []);
+      }
+    } catch (error) {
+      console.error("Failed to load categories:", error);
+    }
+  };
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    if (!newCategoryName.trim()) return;
+
+    setCategoryLoading(true);
+    try {
+      const res = await fetch("/api/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-Id": JSON.parse(localStorage.getItem("user"))?.id, // Passes ID securely to server checks
+        },
+        body: JSON.stringify({ name: newCategoryName.trim() }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success("Category added successfully!");
+        setNewCategoryName("");
+        fetchCategories();
+      } else {
+        toast.error(data.message || "Failed to add category");
+      }
+    } catch (error) {
+      toast.error("Error creating category");
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  const handleRemoveCategory = async (id) => {
+    if (!confirm("Are you sure you want to remove this category?")) return;
+
+    try {
+      const res = await fetch(`/api/categories/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success("Category deleted");
+        setCategories((prev) => prev.filter((cat) => cat._id !== id));
+      } else {
+        toast.error(data.message || "Failed to delete category");
+      }
+    } catch (error) {
+      toast.error("Error deleting category");
     }
   };
 
@@ -276,137 +358,214 @@ export default function SettingsPage() {
         </div>
 
         {/* RIGHT COLUMN: DATA FORMS */}
-        <form onSubmit={handleUpdate} className="lg:col-span-8 space-y-10">
-          {/* PROFILE DETAILS */}
-          <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
-            <div className="flex items-center gap-3 border-b border-gray-50 pb-6">
-              <div className="p-2 bg-gray-900 rounded-lg text-white">
-                <User size={18} />
+        <div className="lg:col-span-8 space-y-10">
+          <form onSubmit={handleUpdate} className="space-y-10">
+            {/* PROFILE DETAILS */}
+            <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
+              <div className="flex items-center gap-3 border-b border-gray-50 pb-6">
+                <div className="p-2 bg-gray-900 rounded-lg text-white">
+                  <User size={18} />
+                </div>
+                <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">
+                  Public Information
+                </h3>
               </div>
-              <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">
-                Public Information
-              </h3>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                  Username (Locked)
-                </label>
-                <input
-                  type="text"
-                  disabled
-                  value={formData.name}
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl font-bold text-gray-400 cursor-not-allowed"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
+                    Username (Locked)
+                  </label>
+                  <input
+                    type="text"
+                    disabled
+                    value={formData.name}
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl font-bold text-gray-400 cursor-not-allowed"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
+                    Designation
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.designation}
+                    placeholder="e.g. Senior SEO Expert"
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-black font-medium focus:ring-2 focus:ring-gray-900/5 transition-all outline-none"
+                    onChange={(e) =>
+                      setFormData({ ...formData, designation: e.target.value })
+                    }
+                  />
+                </div>
               </div>
+
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                  Designation
+                  Bio / Description
                 </label>
-                <input
-                  type="text"
-                  value={formData.designation}
-                  placeholder="e.g. Senior SEO Expert"
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-black font-medium focus:ring-2 focus:ring-gray-900/5 transition-all outline-none"
+                <textarea
+                  rows="5"
+                  value={formData.description}
+                  className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-black font-medium resize-none focus:ring-2 focus:ring-gray-900/5 transition-all outline-none"
                   onChange={(e) =>
-                    setFormData({ ...formData, designation: e.target.value })
+                    setFormData({ ...formData, description: e.target.value })
                   }
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                Bio / Description
-              </label>
-              <textarea
-                rows="5"
-                value={formData.description}
-                className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-black font-medium resize-none focus:ring-2 focus:ring-gray-900/5 transition-all outline-none"
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-              />
-            </div>
-          </div>
-
-          {/* SOCIAL FOOTPRINT */}
-          <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
-            <div className="flex items-center gap-3 border-b border-gray-50 pb-6">
-              <div className="p-2 bg-gray-900 rounded-lg text-white">
-                <Globe size={18} />
-              </div>
-              <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">
-                Social Footprint
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                {
-                  id: "linkedin",
-                  icon: <Linkedin size={18} />,
-                  label: "LinkedIn URL",
-                },
-                {
-                  id: "instagram",
-                  icon: <Instagram size={18} />,
-                  label: "Instagram URL",
-                },
-                {
-                  id: "facebook",
-                  icon: <Facebook size={18} />,
-                  label: "Facebook URL",
-                },
-                {
-                  id: "twitter",
-                  icon: <Twitter size={18} />,
-                  label: "Twitter / X",
-                },
-                {
-                  id: "youtube",
-                  icon: <Youtube size={18} />,
-                  label: "YouTube Channel",
-                },
-              ].map((item) => (
-                <div key={item.id} className="space-y-2">
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
-                    {item.label}
-                  </label>
-                  <div className="relative group">
-                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gray-900 transition-colors">
-                      {item.icon}
-                    </div>
-                    <input
-                      type="url"
-                      placeholder="https://..."
-                      value={formData.socials[item.id]}
-                      onChange={(e) =>
-                        handleSocialChange(item.id, e.target.value)
-                      }
-                      className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium text-black outline-none focus:ring-2 focus:ring-gray-900/5 transition-all"
-                    />
-                  </div>
+            {/* SOCIAL FOOTPRINT */}
+            <div className="bg-white p-10 rounded-[3rem] border border-gray-100 shadow-sm space-y-8">
+              <div className="flex items-center gap-3 border-b border-gray-50 pb-6">
+                <div className="p-2 bg-gray-900 rounded-lg text-white">
+                  <Globe size={18} />
                 </div>
-              ))}
-            </div>
-          </div>
+                <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">
+                  Social Footprint
+                </h3>
+              </div>
 
-          <button
-            disabled={saving}
-            type="submit"
-            className="w-full bg-gray-900 text-white py-6 rounded-3xl font-black uppercase tracking-[0.2em] hover:bg-blue-600 hover:shadow-2xl hover:shadow-blue-200 transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50"
-          >
-            {saving ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <>
-                <Save size={20} /> Sync All Changes
-              </>
-            )}
-          </button>
-        </form>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  {
+                    id: "linkedin",
+                    icon: <Linkedin size={18} />,
+                    label: "LinkedIn URL",
+                  },
+                  {
+                    id: "instagram",
+                    icon: <Instagram size={18} />,
+                    label: "Instagram URL",
+                  },
+                  {
+                    id: "facebook",
+                    icon: <Facebook size={18} />,
+                    label: "Facebook URL",
+                  },
+                  {
+                    id: "twitter",
+                    icon: <Twitter size={18} />,
+                    label: "Twitter / X",
+                  },
+                  {
+                    id: "youtube",
+                    icon: <Youtube size={18} />,
+                    label: "YouTube Channel",
+                  },
+                ].map((item) => (
+                  <div key={item.id} className="space-y-2">
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-2">
+                      {item.label}
+                    </label>
+                    <div className="relative group">
+                      <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gray-900 transition-colors">
+                        {item.icon}
+                      </div>
+                      <input
+                        type="url"
+                        placeholder="https://..."
+                        value={formData.socials[item.id]}
+                        onChange={(e) =>
+                          handleSocialChange(item.id, e.target.value)
+                        }
+                        className="w-full pl-14 pr-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium text-black outline-none focus:ring-2 focus:ring-gray-900/5 transition-all"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button
+              disabled={saving}
+              type="submit"
+              className="w-full bg-gray-900 text-white py-6 rounded-3xl font-black uppercase tracking-[0.2em] hover:bg-blue-600 hover:shadow-2xl hover:shadow-blue-200 transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50"
+            >
+              {saving ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  <Save size={20} /> Sync All Changes
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* ================= SUPER_ADMIN CONTROL MODULE ================= */}
+          {userRole === "SUPER_ADMIN" && (
+            <div className="bg-white p-10 rounded-[3rem] border-2 border-dashed border-neutral-200 shadow-sm space-y-8 mt-10">
+              <div className="flex items-center gap-3 border-b border-gray-50 pb-6">
+                <div className="p-2 bg-blue-600 rounded-lg text-white">
+                  <Layers size={18} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest">
+                    Global Blog Categories
+                  </h3>
+                  <span className="text-[10px] font-mono text-blue-600 font-bold uppercase tracking-wider block mt-0.5">
+                    Super Admin Exclusive Space
+                  </span>
+                </div>
+              </div>
+
+              {/* Add Category Form */}
+              <form onSubmit={handleAddCategory} className="flex gap-4">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter new category name (e.g. Technology, Culture)"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium text-black outline-none focus:ring-2 focus:ring-gray-900/5 transition-all"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={categoryLoading}
+                  className="px-6 bg-blue-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-md shadow-blue-600/10 active:scale-95 disabled:opacity-50"
+                >
+                  {categoryLoading ? (
+                    <Loader2 className="animate-spin" size={18} />
+                  ) : (
+                    <>
+                      <Plus size={18} /> Add
+                    </>
+                  )}
+                </button>
+              </form>
+
+              {/* Category Track List */}
+              <div className="space-y-2 max-h-[260px] overflow-y-auto pr-2">
+                {categories.length === 0 ? (
+                  <p className="text-xs text-neutral-400 italic text-center py-4">
+                    No categories found. Start by creating your first global
+                    item above.
+                  </p>
+                ) : (
+                  categories.map((cat) => (
+                    <div
+                      key={cat._id}
+                      className="flex items-center justify-between p-4 bg-neutral-50 rounded-xl border border-neutral-100/70 hover:border-neutral-200 transition-colors"
+                    >
+                      <span className="text-sm font-bold text-neutral-800 uppercase tracking-wide">
+                        {cat.name}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveCategory(cat._id)}
+                        className="p-2.5 text-neutral-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                        title="Remove Category"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

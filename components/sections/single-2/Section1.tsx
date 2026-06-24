@@ -17,22 +17,13 @@ export default function Section1({ blog, author }: { blog: any; author: any }) {
   return (
     <>
       <section className="sec-1-single-2 pb-70 overflow-hidden">
-        <div className="position-relative block-banner">
-          {/* Main Hero Image */}
-          <Image
-            className="banner start-50 position-lg-absolute d-lg-block d-none"
-            src={blog.img || "/assets/imgs/page/img-108.png"}
-            alt={blog.title}
-            width={944}
-            height={600}
-            style={{ objectFit: "cover" }}
-          />
-
+        <div className="position-relative block-banner pt-4">
           <div className="container">
-            <div className="row">
-              <div className="col-lg-6 pe-lg-5">
+            {/* Row 1: Header Text Content, Metadata, and Title */}
+            <div className="row justify-content-center">
+              <div className="col-lg-10 col-12">
                 <nav aria-label="breadcrumb">
-                  <ul className="breadcrumb list-unstyled d-flex flex-row gap-2 align-items-center m-0 ps-0 py-4">
+                  <ul className="breadcrumb list-unstyled d-flex flex-row gap-2 align-items-center m-0 ps-0 pb-3">
                     <li className="breadcrumb-item">
                       <Link href="/" className="text-600 fs-7 hover-dark">
                         Home
@@ -68,11 +59,11 @@ export default function Section1({ blog, author }: { blog: any; author: any }) {
                   </ul>
                 </nav>
 
-                <div className="card-title">
-                  <div className="article card-info d-flex flex-wrap align-items-center gap-2 mt-4">
+                <div className="card-title py-2">
+                  <div className="article card-info d-flex flex-wrap align-items-center gap-2 mt-2">
                     <Link
                       href={`/category/${blog.category}`}
-                      className="badge bg-1 fs-8 text-capitalize"
+                      className="badge bg-1 fs-8 text-capitalize px-3 py-2 rounded"
                     >
                       {blog.category
                         ? blog.category.replace(/-/g, " ")
@@ -83,47 +74,45 @@ export default function Section1({ blog, author }: { blog: any; author: any }) {
                         <p className="fs-8 m-0">5 mins read</p>
                       </li>
                     </ul>
-                    <h2
-                      className="mt-3"
-                      style={{
-                        // whiteSpace: "pre-line",
-                        // lineHeight: "1.5",
-                        fontSize: "2.5rem",
-                      }}
-                    >
-                      {blog.title}
-                    </h2>
                   </div>
 
-                  <div className="border-top mt-4" />
+                  {/* High Impact Full-Width Dynamic Responsive Heading */}
+                  <h1
+                    className="mt-3 mb-4 fw-bold text-dark"
+                    style={{
+                      fontSize: "calc(1.8rem + 1.5vw)",
+                      lineHeight: "1.25",
+                    }}
+                  >
+                    {blog.title}
+                  </h1>
 
-                  <div className="bottom mt-auto d-flex flex-wrap align-items-center gap-2 pt-4">
-                    <Link
-                      href={`/author/${blog.authorId}`}
-                      className="author d-flex align-items-center gap-2"
-                    >
-                      <Image
-                        className="avatar avatar-md rounded-circle"
-                        src={
-                          author?.image ||
-                          "/assets/imgs/template/author/author-9.png"
-                        }
-                        alt={author?.name || "Author"}
-                        width={41}
-                        height={41}
-                      />
-                      <span className="fs-7 text-dark fw-regular">
-                        {author?.name || blog.postedby || "Staff"}
-                      </span>
-                    </Link>
+                  <div className="bottom d-flex flex-wrap align-items-center justify-content-between gap-3 pt-2 pb-4">
+                    <div className="d-flex align-items-center gap-3">
+                      <Link
+                        href={`/author/${author?.slug || ""}`}
+                        className="author d-flex align-items-center gap-2"
+                      >
+                        <Image
+                          className="avatar avatar-md rounded-circle"
+                          src={
+                            author?.image ||
+                            "/assets/imgs/template/author/author-9.png"
+                          }
+                          alt={author?.name || "Author"}
+                          width={41}
+                          height={41}
+                        />
+                        <span className="fs-7 text-dark fw-medium">
+                          {author?.name || blog.postedby || "Staff"}
+                        </span>
+                      </Link>
 
-                    <ul className="d-flex align-items-center gap-4 text-600 m-0 ps-3">
-                      <li>
-                        <p className="fs-8 m-0">{publishDate}</p>
-                      </li>
-                    </ul>
+                      <span className="text-muted fs-8">|</span>
+                      <p className="fs-8 m-0 text-600">{publishDate}</p>
+                    </div>
 
-                    <div className="ms-md-auto ms-5 d-flex align-items-center gap-3 me-5">
+                    <div className="d-flex align-items-center gap-4 text-600">
                       <div className="comment d-flex align-items-center fs-8">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -162,25 +151,36 @@ export default function Section1({ blog, author }: { blog: any; author: any }) {
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="col-lg-6 d-block d-lg-none pb-4">
-                <Image
-                  className="banner cover-image"
-                  src={blog.img || "/assets/imgs/page/img-108.png"}
-                  alt={blog.title}
-                  width={944}
-                  height={600}
-                />
+            {/* Row 2: Clean, Full-Width Stacked Hero Image Placement */}
+            <div className="row justify-content-center mt-3">
+              <div className="col-12">
+                <div className="position-relative overflow-hidden rounded-16 shadow-sm">
+                  <Image
+                    className="w-100 h-auto"
+                    src={blog.img || "/assets/imgs/page/img-108.png"}
+                    alt={blog.title}
+                    width={1400}
+                    height={750}
+                    style={{
+                      objectFit: "cover",
+                      maxHeight: "650px",
+                      borderRadius: "16px",
+                    }}
+                    priority
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Article Body Area */}
         <div className="container mt-5">
           <div className="row">
             <div className="col-lg-9 col-md-10 offset-lg-1 offset-md-1">
-              {/* Passing the actual blog content to ContentSingle */}
-              <ContentSingle blog={blog} image={blog.img} />
+              <ContentSingle blog={blog} />
             </div>
           </div>
           <SocialShare title={blog.title} slug={blog.slug} />
