@@ -20,7 +20,7 @@ export default function AuthorCard({ card, idx }: CardProps) {
         key={idx}
       >
         <Link href={card.link}>
-          <div className="position-relative w-100" style={{ height: "370px" }}>
+          <div className="position-relative w-100" style={{ height: "260px" }}>
             <Image
               src={card.img || "/assets/imgs/template/default-avatar.png"}
               alt={card.name || "author"}

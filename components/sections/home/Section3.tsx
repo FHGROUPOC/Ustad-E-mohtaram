@@ -98,7 +98,7 @@ export default async function Section3({ blogs }: { blogs: any[] }) {
               slidesPerView={3}
               spaceBetween={27}
               loop={sliderPosts.length > 2}
-              autoplay={{ delay: 5000 }}
+              // autoplay={{ delay: 5000 }}
               breakpoints={{
                 1200: { slidesPerView: 2 },
                 768: { slidesPerView: 1 },
