@@ -90,7 +90,7 @@ export default function Section1({ blog, author }: { blog: any; author: any }) {
                   <div className="bottom d-flex flex-wrap align-items-center justify-content-between gap-3 pt-2 pb-4">
                     <div className="d-flex align-items-center gap-3">
                       <Link
-                        href={`/author/${blog.authorId}`}
+                        href={`/author/${author?.slug || ""}`}
                         className="author d-flex align-items-center gap-2"
                       >
                         <Image
