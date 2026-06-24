@@ -69,7 +69,7 @@ export default async function Section3({ blogs }: { blogs: any[] }) {
 
   return (
     <section className="sec-3-home-1 sec-padding overflow-hidden">
-      <div className="container">
+      <div className="px-5">
         <div className="row">
           <div className="col-12">
             <TitleWhite
@@ -95,12 +95,12 @@ export default async function Section3({ blogs }: { blogs: any[] }) {
           <div className="col-12 mt-4">
             <SwiperDynamic
               className="swiper slider-2 rounded-16 overflow-hidden"
-              slidesPerView={3}
+              slidesPerView={4}
               spaceBetween={27}
-              loop={sliderPosts.length > 2}
+              loop={sliderPosts.length > 4}
               autoplay={{ delay: 5000 }}
               breakpoints={{
-                1200: { slidesPerView: 2 },
+                1200: { slidesPerView: 4 },
                 768: { slidesPerView: 1 },
                 0: { slidesPerView: 1 },
               }}

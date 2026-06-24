@@ -150,3 +150,46 @@ export async function GET(request) {
     );
   }
 }
+
+// ---------------------------------------------------------
+// PUT: Migration to generate missing slugs for existing users
+// ---------------------------------------------------------
+export async function PUT(request) {
+  try {
+    await dbConnect();
+
+    // Find all users where the slug field does not exist, is null, or is empty
+    const usersToUpdate = await User.find({
+      $or: [
+        { slug: { $exists: false } },
+        { slug: null },
+        { slug: "" }
+      ]
+    });
+
+    let updatedCount = 0;
+
+    // Loop through users and save individually to run helper checks per iteration
+    for (const user of usersToUpdate) {
+      const uniqueSlug = await generateUniqueSlug(user.name);
+      
+      await User.updateOne(
+        { _id: user._id },
+        { $set: { slug: uniqueSlug } }
+      );
+      
+      updatedCount++;
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Migration completed successfully. Updated ${updatedCount} users with a new unique slug.`,
+    });
+  } catch (error) {
+    console.error("Migration Error:", error);
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 },
+    );
+  }
+}

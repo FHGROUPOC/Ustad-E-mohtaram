@@ -58,9 +58,9 @@ export default function ArticleCard4({ card }: CardProps) {
         </div>
 
         <Link href={card.linkPost}>
-          <h4 className="card-title line-clamp-2 mb-3">
-            {truncate(card.title, 50)}
-          </h4>
+          <h5 className="card-title line-clamp-2 mb-3">
+            {truncate(card.title, 25)}
+          </h5>
         </Link>
 
         <div className="position-relative card-img mb-3">

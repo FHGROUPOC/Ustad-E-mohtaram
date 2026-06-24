@@ -316,7 +316,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               return (
                 <blockquote
                   key={i}
-                  className={`blockquote p-4 border-start border-4 border-primary bg-light rounded responsive-typography ${quoteConfig.className}`}
+                  className={` p-4 border-start border-4 border-primary bg-light rounded responsive-typography ${quoteConfig.className}`}
                   dir={quoteConfig.dir}
                 >
                   <p
