@@ -20,6 +20,10 @@ module.exports = {
         6: "#FFE4E6",
         13: "#0e0e0f", // Often used for dark sections in this template
       },
+      fontFamily: {
+        // Urdu font ko variable ke sath map karein
+        urdu: ["var(--font-noto-urdu)", "serif"],
+      },
     },
   },
   safelist: ["bg-1", "bg-2", "bg-3", "bg-4", "bg-5", "bg-6", "bg-13"],
