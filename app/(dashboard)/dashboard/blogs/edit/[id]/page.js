@@ -54,12 +54,12 @@ const EditBlog = () => {
         try {
           const [blogRes, categoriesRes] = await Promise.all([
             fetch(`/api/blogs/${id}`),
-            fetch("/api/categories")
+            fetch("/api/categories"),
           ]);
 
           if (categoriesRes.ok) {
             const catData = await categoriesRes.json();
-            
+
             // Safeguard: Ensure catData is truly an array before setting state
             if (Array.isArray(catData)) {
               setCategories(catData);
@@ -133,7 +133,7 @@ const EditBlog = () => {
       description: { type, value: "" },
       hyperlink: { type, linkTitle: "", linkUrl: "" },
       bullet: { type, value: "" },
-      youtube: { type, value: "" },
+      youtube: { type, value: "", subType: "video" },
       "single-image": { type, value: "", imageUrl: "" },
       "image-text-side": {
         type,
@@ -217,7 +217,6 @@ const EditBlog = () => {
       case "Sub":
       case "description":
       case "bullet":
-      case "youtube":
         return (
           <div className="flex items-center gap-2 w-full">
             {field.type === "description" ? (
@@ -245,6 +244,67 @@ const EditBlog = () => {
             >
               ✕
             </button>
+          </div>
+        );
+
+      case "youtube":
+        return (
+          <div className="flex flex-col gap-3 w-full p-4 bg-red-50 border border-red-200 rounded-xl relative">
+            <div className="flex items-center justify-between border-b border-red-200 pb-2 mb-1">
+              <span className="text-xs font-black text-red-700 uppercase tracking-wider flex items-center gap-1">
+                <AiFillYoutube size={16} /> YouTube Integrator Settings
+              </span>
+              <div className="flex items-center gap-4">
+                <label className="flex items-center gap-1.5 text-xs text-gray-700 font-bold cursor-pointer">
+                  <input
+                    type="radio"
+                    name={`youtube-subType-${index}`}
+                    value="video"
+                    checked={!field.subType || field.subType === "video"}
+                    onChange={() =>
+                      updateNestedField(index, "subType", "video")
+                    }
+                    className="accent-red-600"
+                  />
+                  Full Video Player
+                </label>
+                <label className="flex items-center gap-1.5 text-xs text-gray-700 font-bold cursor-pointer">
+                  <input
+                    type="radio"
+                    name={`youtube-subType-${index}`}
+                    value="audio"
+                    checked={field.subType === "audio"}
+                    onChange={() =>
+                      updateNestedField(index, "subType", "audio")
+                    }
+                    className="accent-red-600"
+                  />
+                  Audio Only Mode
+                </label>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 w-full">
+              <input
+                type="text"
+                placeholder={
+                  !field.subType || field.subType === "video"
+                    ? "Paste YouTube Video Link or ID..."
+                    : "Paste Audio Stream Link or ID..."
+                }
+                className={commonInputClass}
+                value={field.value || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "value", e.target.value)
+                }
+              />
+              <button
+                className="bg-red-600 text-white p-2 rounded-md transition-colors hover:bg-red-700 shrink-0"
+                onClick={() => handleRemoveField(index)}
+              >
+                ✕
+              </button>
+            </div>
           </div>
         );
 
@@ -500,7 +560,6 @@ const EditBlog = () => {
                   onChange={(e) => setCategory(e.target.value)}
                 >
                   <option value="">Choose One</option>
-                  {/* Inline safeguard `(categories || [])` guarantees a valid array sequence */}
                   {(categories || []).map((cat) => {
                     const catSlug = cat.slug || cat.value || cat;
                     const catName = cat.name || cat.label || cat;
@@ -510,9 +569,10 @@ const EditBlog = () => {
                       </option>
                     );
                   })}
-                  {category && !(categories || []).some(c => (c.slug || c.value || c) === category) && (
-                    <option value={category}>{category}</option>
-                  )}
+                  {category &&
+                    !(categories || []).some(
+                      (c) => (c.slug || c.value || c) === category,
+                    ) && <option value={category}>{category}</option>}
                 </select>
               </div>
               <div>
