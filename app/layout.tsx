@@ -1,17 +1,26 @@
 "use client";
 import React from "react";
 import { usePathname } from "next/navigation";
-import { Geist } from "next/font/google";
+import { Geist, Noto_Nastaliq_Urdu } from "next/font/google";
 import PublicLayout from "@/components/PublicLayout"; // Import the wrapper
 import SessionProvider from "@/components/SessionProvider";
 import BecomeAuthorModal from "@/components/BecomeAuthorModal";
 import { Toaster } from "react-hot-toast";
 
-
+// Default English Font
 const geist = Geist({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-geist", // CSS variable setup
+});
+
+// Custom Urdu Font
+const notoUrdu = Noto_Nastaliq_Urdu({
+  weight: ["400", "700"],
+  subsets: ["arabic"],
+  display: "swap",
+  variable: "--font-noto-urdu", // CSS variable setup
 });
 
 export default function RootLayout({
@@ -21,15 +30,25 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
   const isDashboard = pathname?.startsWith("/dashboard");
+  
+  // Check karein agar pathname urdu page ka hai (e.g., '/ur' ya '/urdu')
+  const isUrdu = pathname?.startsWith("/ur") || pathname?.includes("/urdu");
 
   return (
-    <html lang="en">
+    // Dynamic lang attribute aur custom font variables HTML tag par pass karein
+    <html 
+      lang={isUrdu ? "ur" : "en"} 
+      dir={isUrdu ? "rtl" : "ltr"}
+      className={`${geist.variable} ${notoUrdu.variable}`}
+    >
       <body
-        className={`${geist.className} ${isDashboard ? "dashboard-body" : "public-body"}`}
+        className={`${isUrdu ? "font-urdu" : geist.className} ${
+          isDashboard ? "dashboard-body" : "public-body"
+        }`}
       >
         {/* If it's NOT a dashboard, wrap children in PublicLayout.
-                   This loads the CSS via JS imports, enabling instant CSS updates.
-                */}
+            This loads the CSS via JS imports, enabling instant CSS updates.
+        */}
         {!isDashboard ? (
           <SessionProvider>
             <Toaster
