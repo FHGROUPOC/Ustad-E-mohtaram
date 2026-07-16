@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { LuHeading2, LuLink, LuQuote } from "react-icons/lu";
+import { LuHeading2, LuHeading3, LuLink, LuQuote } from "react-icons/lu";
 import { BsTextParagraph, BsLayoutSidebarInsetReverse } from "react-icons/bs";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { MdOutlineFormatListBulleted, MdDragIndicator } from "react-icons/md";
@@ -48,7 +48,6 @@ const AddBlog = () => {
       setCurrentUser(user);
       setWriter(user.name);
 
-      // Fetch categories dynamically from database endpoint
       const fetchCategories = async () => {
         try {
           const res = await fetch("/api/categories");
@@ -76,6 +75,8 @@ const AddBlog = () => {
 
   const addField = (type) => {
     const baseFields = {
+      h2: { type, value: "" },
+      h3: { type, value: "" },
       Sub: { type, value: "" },
       description: { type, value: "" },
       bullet: { type, value: "" },
@@ -96,7 +97,7 @@ const AddBlog = () => {
 
   const updateNestedField = (index, key, val) => {
     const updated = [...morefields];
-    updated[index][key] = val;
+    updated[index] = { ...updated[index], [key]: val };
     setMoreFields(updated);
   };
 
@@ -128,50 +129,25 @@ const AddBlog = () => {
   const renderField = (field, index) => {
     const commonInputClass =
       "w-full p-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-blue-600 outline-none placeholder-gray-500 text-gray-900 text-sm bg-white";
-switch (field.type) {
-  case "Sub":
-  case "description":
-  case "bullet":
-    return (
-      <div key={index} className="flex items-center gap-2 w-full mb-3">
-        {field.type === "description" ? (
-          <textarea
-            rows={3}
-            className={commonInputClass}
-            placeholder="Paragraph text..."
-            value={field.value}
-            onChange={(e) =>
-              updateNestedField(index, "value", e.target.value)
-            }
-          />
-        ) : (
-          <input
-            type="text"
-            className={commonInputClass}
-            placeholder={`${field.type}...`}
-            value={field.value}
-            onChange={(e) =>
-              updateNestedField(index, "value", e.target.value)
-            }
-          />
-        )}
-        <button
-          className="bg-red-600 text-white p-2 rounded-md shrink-0 hover:bg-red-700"
-          onClick={() => handleRemoveField(index)}
-        >
-          ✕
-        </button>
-      </div>
-    );
 
-  case "youtube":
-    return (
-      <div key={index} className="flex flex-col gap-2 w-full mb-3 p-3 bg-red-50 border border-red-200 rounded-xl">
-        <div className="flex items-center gap-2 w-full">
+    const headingTypes = ["h2", "h3", "Sub"];
+    const isHeading = headingTypes.includes(field.type);
+
+    if (isHeading) {
+      const headingStyles = {
+        h2: "font-extrabold text-xl border-l-4 border-orange-500 pl-2",
+        Sub: "font-extrabold text-xl border-l-4 border-orange-500 pl-2",
+        h3: "font-bold text-lg border-l-4 border-yellow-500 pl-2",
+      };
+      const currentStyle = headingStyles[field.type] || headingStyles["h2"];
+      const placeholderName = field.type === "Sub" ? "Heading 2" : field.type.toUpperCase();
+
+      return (
+        <div key={index} className="flex items-center gap-2 w-full mb-3">
           <input
             type="text"
-            className={commonInputClass}
-            placeholder="Paste YouTube Link (https://...)"
+            className={`${commonInputClass} ${currentStyle}`}
+            placeholder={`${placeholderName} Text...`}
             value={field.value || ""}
             onChange={(e) =>
               updateNestedField(index, "value", e.target.value)
@@ -184,271 +160,332 @@ switch (field.type) {
             ✕
           </button>
         </div>
-        
-        {/* Toggle Option Controls */}
-        <div className="flex items-center gap-4 mt-1 pl-1">
-          <span className="text-[10px] font-black text-gray-500 uppercase tracking-wider">Format Mode:</span>
-          <label className="flex items-center gap-1 text-xs font-bold text-gray-900 cursor-pointer select-none">
-            <input
-              type="radio"
-              name={`yt-mode-${index}`}
-              checked={!field.subType || field.subType === "video"}
-              onChange={() => updateNestedField(index, "subType", "video")}
-              className="text-red-600 focus:ring-red-500"
-            />
-            Full Video Player
-          </label>
-          <label className="flex items-center gap-1 text-xs font-bold text-gray-900 cursor-pointer select-none">
-            <input
-              type="radio"
-              name={`yt-mode-${index}`}
-              checked={field.subType === "audio"}
-              onChange={() => updateNestedField(index, "subType", "audio")}
-              className="text-red-600 focus:ring-red-500"
-            />
-            Audio Only Mode
-          </label>
-        </div>
-      </div>
-    );
+      );
+    }
 
-  case "hyperlink":
-    return (
-      <div
-        key={index}
-        className="flex flex-col md:flex-row items-center gap-3 w-full mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl relative"
-      >
-        <div className="flex-1 w-full">
-          <label className="text-[9px] font-black text-indigo-400 uppercase">
-            Link Text
-          </label>
-          <input
-            type="text"
-            placeholder="e.g. Read More"
-            className={commonInputClass}
-            value={field.linkTitle}
-            onChange={(e) =>
-              updateNestedField(index, "linkTitle", e.target.value)
-            }
-          />
-        </div>
-        <div className="flex-[2] w-full">
-          <label className="text-[9px] font-black text-indigo-400 uppercase">
-            Destination URL
-          </label>
-          <input
-            type="text"
-            placeholder="https://..."
-            className={commonInputClass}
-            value={field.linkUrl}
-            onChange={(e) =>
-              updateNestedField(index, "linkUrl", e.target.value)
-            }
-          />
-        </div>
-        <button
-          className="bg-red-600 text-white p-2 rounded-lg shrink-0 mt-4 md:mt-0"
-          onClick={() => handleRemoveField(index)}
-        >
-          ✕
-        </button>
-      </div>
-    );
-
-  case "single-image":
-    return (
-      <div
-        key={index}
-        className="border border-dashed border-gray-500 p-4 rounded-lg mb-4 bg-gray-50 flex flex-col gap-3"
-      >
-        <div className="flex flex-col md:flex-row items-center gap-4">
-          {field.imageUrl && (
-            <img
-              src={field.imageUrl}
-              className="w-20 h-20 object-cover rounded shadow-md border border-gray-300"
-            />
-          )}
-          <CldUploadButton
-            uploadPreset="Blogs_Images"
-            className="bg-gray-800 text-white px-4 py-2 rounded text-sm shrink-0 font-bold"
-            onSuccess={(res) => {
-              if (res.info.format !== "webp") {
-                toast.error("Only WebP images are allowed!");
-                return;
-              }
-              updateNestedField(index, "imageUrl", res.info.secure_url);
-            }}
-            options={{
-              clientAllowedFormats: ["webp"],
-              sources: ["local", "url"],
-            }}
-          >
-            Upload Image
-          </CldUploadButton>
-          <input
-            className={commonInputClass}
-            placeholder="Describe this image (Alt tag)..."
-            value={field.value}
-            onChange={(e) =>
-              updateNestedField(index, "value", e.target.value)
-            }
-          />
-          <button
-            className="bg-red-600 text-white p-2 rounded-md shrink-0"
-            onClick={() => handleRemoveField(index)}
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-    );
-
-  case "image-text-side":
-    return (
-      <div
-        key={index}
-        className="border-2 border-blue-200 p-4 rounded-xl bg-blue-50 mb-4 relative shadow-sm"
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CldUploadButton
-            uploadPreset="Blogs_Images"
-            className="h-40 bg-gray-200 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-500 overflow-hidden hover:bg-gray-300 transition-colors"
-            options={{
-              clientAllowedFormats: ["webp"],
-              sources: ["local", "url"],
-            }}
-            onSuccess={(res) => {
-              if (res.info.format !== "webp") {
-                toast.error("Only WebP images are allowed!");
-                return;
-              }
-              updateNestedField(index, "imageUrl", res.info.secure_url);
-            }}
-          >
-            {field.imageUrl ? (
-              <img
-                src={field.imageUrl}
-                className="w-full h-full object-cover"
+    switch (field.type) {
+      case "description":
+      case "bullet":
+        return (
+          <div key={index} className="flex items-center gap-2 w-full mb-3">
+            {field.type === "description" ? (
+              <textarea
+                rows={3}
+                className={commonInputClass}
+                placeholder="Paragraph text..."
+                value={field.value || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "value", e.target.value)
+                }
               />
             ) : (
-              <div className="text-center text-gray-700 font-bold">
-                <PiImage className="mx-auto" size={24} />
-                <span className="text-[10px]">Click to Upload</span>
-              </div>
-            )}
-          </CldUploadButton>
-          <div className="space-y-2">
-            <input
-              className={commonInputClass}
-              placeholder="Side Heading"
-              value={field.sideHeading}
-              onChange={(e) =>
-                updateNestedField(index, "sideHeading", e.target.value)
-              }
-            />
-            <textarea
-              className={commonInputClass}
-              rows={4}
-              placeholder="Description next to image..."
-              value={field.sideDescription}
-              onChange={(e) =>
-                updateNestedField(index, "sideDescription", e.target.value)
-              }
-            />
-          </div>
-        </div>
-        <button
-          className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs font-bold border-2 border-white shadow"
-          onClick={() => handleRemoveField(index)}
-        >
-          ✕
-        </button>
-      </div>
-    );
-
-  case "double-image":
-    return (
-      <div
-        key={index}
-        className="border border-gray-400 p-4 rounded-xl bg-gray-50 mb-4 relative"
-      >
-        <div className="grid grid-cols-2 gap-4">
-          {[0, 1].map((idx) => (
-            <CldUploadButton
-              key={idx}
-              options={{
-                clientAllowedFormats: ["webp"],
-                sources: ["local", "url"],
-              }}
-              uploadPreset="Blogs_Images"
-              className="h-28 bg-white rounded border-2 border-dashed border-gray-400 flex items-center justify-center overflow-hidden hover:bg-gray-100 transition-colors"
-              onSuccess={(res) => {
-                if (res.info.format !== "webp") {
-                  toast.error("Only WebP images are allowed!");
-                  return;
+              <input
+                type="text"
+                className={commonInputClass}
+                placeholder="Bullet list item..."
+                value={field.value || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "value", e.target.value)
                 }
-                const urls = [...field.imageUrls];
-                urls[idx] = res.info.secure_url;
-                updateNestedField(index, "imageUrls", urls);
-              }}
+              />
+            )}
+            <button
+              className="bg-red-600 text-white p-2 rounded-md shrink-0 hover:bg-red-700"
+              onClick={() => handleRemoveField(index)}
             >
-              {field.imageUrls[idx] ? (
-                <img
-                  src={field.imageUrls[idx]}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="text-[10px] text-gray-700 font-bold">
-                  Image {idx + 1}
-                </span>
-              )}
-            </CldUploadButton>
-          ))}
-        </div>
-        <button
-          className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs font-bold border-2 border-white shadow"
-          onClick={() => handleRemoveField(index)}
-        >
-          ✕
-        </button>
-      </div>
-    );
+              ✕
+            </button>
+          </div>
+        );
 
-  case "quote":
-    return (
-      <div
-        key={index}
-        className="border-l-8 border-black p-4 bg-gray-200 mb-4 flex gap-4 items-start relative shadow-inner"
-      >
-        <LuQuote size={30} className="text-gray-600 shrink-0" />
-        <div className="flex-1 space-y-2">
-          <textarea
-            className="w-full bg-transparent outline-none italic text-lg font-serif text-gray-900 font-medium placeholder-gray-500"
-            placeholder="Insert quote..."
-            value={field.value}
-            onChange={(e) =>
-              updateNestedField(index, "value", e.target.value)
-            }
-          />
-          <input
-            className="w-full text-xs font-black uppercase tracking-widest text-gray-700"
-            value={field.author}
-            onChange={(e) =>
-              updateNestedField(index, "author", e.target.value)
-            }
-          />
-        </div>
-        <button
-          className="text-red-600 hover:text-red-800 p-1"
-          onClick={() => handleRemoveField(index)}
-        >
-          ✕
-        </button>
-      </div>
-    );
-  default:
-    return null;
-}
+      case "youtube":
+        return (
+          <div key={index} className="flex flex-col gap-2 w-full mb-3 p-3 bg-red-50 border border-red-200 rounded-xl">
+            <div className="flex items-center gap-2 w-full">
+              <input
+                type="text"
+                className={commonInputClass}
+                placeholder="Paste YouTube Link (https://...)"
+                value={field.value || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "value", e.target.value)
+                }
+              />
+              <button
+                className="bg-red-600 text-white p-2 rounded-md shrink-0 hover:bg-red-700"
+                onClick={() => handleRemoveField(index)}
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="flex items-center gap-4 mt-1 pl-1">
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-wider">Format Mode:</span>
+              <label className="flex items-center gap-1 text-xs font-bold text-gray-900 cursor-pointer select-none">
+                <input
+                  type="radio"
+                  name={`yt-mode-${index}`}
+                  checked={!field.subType || field.subType === "video"}
+                  onChange={() => updateNestedField(index, "subType", "video")}
+                  className="text-red-600 focus:ring-red-500"
+                />
+                Full Video Player
+              </label>
+              <label className="flex items-center gap-1 text-xs font-bold text-gray-900 cursor-pointer select-none">
+                <input
+                  type="radio"
+                  name={`yt-mode-${index}`}
+                  checked={field.subType === "audio"}
+                  onChange={() => updateNestedField(index, "subType", "audio")}
+                  className="text-red-600 focus:ring-red-500"
+                />
+                Audio Only Mode
+              </label>
+            </div>
+          </div>
+        );
+
+      case "hyperlink":
+        return (
+          <div
+            key={index}
+            className="flex flex-col md:flex-row items-center gap-3 w-full mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl relative"
+          >
+            <div className="flex-1 w-full">
+              <label className="text-[9px] font-black text-indigo-400 uppercase">
+                Link Text
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Read More"
+                className={commonInputClass}
+                value={field.linkTitle || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "linkTitle", e.target.value)
+                }
+              />
+            </div>
+            <div className="flex-[2] w-full">
+              <label className="text-[9px] font-black text-indigo-400 uppercase">
+                Destination URL
+              </label>
+              <input
+                type="text"
+                placeholder="https://..."
+                className={commonInputClass}
+                value={field.linkUrl || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "linkUrl", e.target.value)
+                }
+              />
+            </div>
+            <button
+              className="bg-red-600 text-white p-2 rounded-lg shrink-0 mt-4 md:mt-0"
+              onClick={() => handleRemoveField(index)}
+            >
+              ✕
+            </button>
+          </div>
+        );
+
+      case "single-image":
+        return (
+          <div
+            key={index}
+            className="border border-dashed border-gray-500 p-4 rounded-lg mb-4 bg-gray-50 flex flex-col gap-3"
+          >
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              {field.imageUrl && (
+                <img
+                  src={field.imageUrl}
+                  className="w-20 h-20 object-cover rounded shadow-md border border-gray-300"
+                  alt="Single upload preview"
+                />
+              )}
+              <CldUploadButton
+                uploadPreset="Blogs_Images"
+                className="bg-gray-800 text-white px-4 py-2 rounded text-sm shrink-0 font-bold"
+                onSuccess={(res) => {
+                  if (res.info.format !== "webp") {
+                    toast.error("Only WebP images are allowed!");
+                    return;
+                  }
+                  updateNestedField(index, "imageUrl", res.info.secure_url);
+                }}
+                options={{
+                  clientAllowedFormats: ["webp"],
+                  sources: ["local", "url"],
+                }}
+              >
+                Upload Image
+              </CldUploadButton>
+              <input
+                className={commonInputClass}
+                placeholder="Describe this image (Alt tag)..."
+                value={field.value || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "value", e.target.value)
+                }
+              />
+              <button
+                className="bg-red-600 text-white p-2 rounded-md shrink-0"
+                onClick={() => handleRemoveField(index)}
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        );
+
+      case "image-text-side":
+        return (
+          <div
+            key={index}
+            className="border-2 border-blue-200 p-4 rounded-xl bg-blue-50 mb-4 relative shadow-sm"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CldUploadButton
+                uploadPreset="Blogs_Images"
+                className="h-40 bg-gray-200 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-500 overflow-hidden hover:bg-gray-300 transition-colors"
+                options={{
+                  clientAllowedFormats: ["webp"],
+                  sources: ["local", "url"],
+                }}
+                onSuccess={(res) => {
+                  if (res.info.format !== "webp") {
+                    toast.error("Only WebP images are allowed!");
+                    return;
+                  }
+                  updateNestedField(index, "imageUrl", res.info.secure_url);
+                }}
+              >
+                {field.imageUrl ? (
+                  <img
+                    src={field.imageUrl}
+                    className="w-full h-full object-cover"
+                    alt="Side layout preview"
+                  />
+                ) : (
+                  <div className="text-center text-gray-700 font-bold">
+                    <PiImage className="mx-auto" size={24} />
+                    <span className="text-[10px]">Click to Upload</span>
+                  </div>
+                )}
+              </CldUploadButton>
+              <div className="space-y-2">
+                <input
+                  className={commonInputClass}
+                  placeholder="Side Heading"
+                  value={field.sideHeading || ""}
+                  onChange={(e) =>
+                    updateNestedField(index, "sideHeading", e.target.value)
+                  }
+                />
+                <textarea
+                  className={commonInputClass}
+                  rows={4}
+                  placeholder="Description next to image..."
+                  value={field.sideDescription || ""}
+                  onChange={(e) =>
+                    updateNestedField(index, "sideDescription", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+            <button
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs font-bold border-2 border-white shadow"
+              onClick={() => handleRemoveField(index)}
+            >
+              ✕
+            </button>
+          </div>
+        );
+
+      case "double-image":
+        return (
+          <div
+            key={index}
+            className="border border-gray-400 p-4 rounded-xl bg-gray-50 mb-4 relative"
+          >
+            <div className="grid grid-cols-2 gap-4">
+              {[0, 1].map((idx) => (
+                <CldUploadButton
+                  key={idx}
+                  options={{
+                    clientAllowedFormats: ["webp"],
+                    sources: ["local", "url"],
+                  }}
+                  uploadPreset="Blogs_Images"
+                  className="h-28 bg-white rounded border-2 border-dashed border-gray-400 flex items-center justify-center overflow-hidden hover:bg-gray-100 transition-colors"
+                  onSuccess={(res) => {
+                    if (res.info.format !== "webp") {
+                      toast.error("Only WebP images are allowed!");
+                      return;
+                    }
+                    const urls = [...(field.imageUrls || ["", ""])];
+                    urls[idx] = res.info.secure_url;
+                    updateNestedField(index, "imageUrls", urls);
+                  }}
+                >
+                  {field.imageUrls?.[idx] ? (
+                    <img
+                      src={field.imageUrls[idx]}
+                      className="w-full h-full object-cover"
+                      alt={`Double slot preview ${idx + 1}`}
+                    />
+                  ) : (
+                    <span className="text-[10px] text-gray-700 font-bold">
+                      Image {idx + 1}
+                    </span>
+                  )}
+                </CldUploadButton>
+              ))}
+            </div>
+            <button
+              className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 text-xs font-bold border-2 border-white shadow"
+              onClick={() => handleRemoveField(index)}
+            >
+              ✕
+            </button>
+          </div>
+        );
+
+      case "quote":
+        return (
+          <div
+            key={index}
+            className="border-l-8 border-black p-4 bg-gray-200 mb-4 flex gap-4 items-start relative shadow-inner"
+          >
+            <LuQuote size={30} className="text-gray-600 shrink-0" />
+            <div className="flex-1 space-y-2">
+              <textarea
+                className="w-full bg-transparent outline-none italic text-lg font-serif text-gray-900 font-medium placeholder-gray-500"
+                placeholder="Insert quote..."
+                value={field.value || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "value", e.target.value)
+                }
+              />
+              <input
+                className="w-full text-xs font-black uppercase tracking-widest text-gray-700 bg-transparent outline-none"
+                value={field.author || ""}
+                onChange={(e) =>
+                  updateNestedField(index, "author", e.target.value)
+                }
+              />
+            </div>
+            <button
+              className="text-red-600 hover:text-red-800 p-1"
+              onClick={() => handleRemoveField(index)}
+            >
+              ✕
+            </button>
+          </div>
+        );
+
+      default:
+        return null;
+    }
   };
 
   const submitData = async () => {
@@ -715,7 +752,7 @@ switch (field.type) {
                             {...provided.dragHandleProps}
                             className="mt-4 p-2 cursor-grab active:cursor-grabbing text-gray-400 hover:text-blue-600 transition-colors"
                           >
-                            <MdDragIndicator size={24} />
+                            <ThemeDragIndicator size={24} />
                           </div>
 
                           <div className="flex-1">
@@ -737,7 +774,8 @@ switch (field.type) {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               {[
-                { type: "Sub", icon: <LuHeading2 />, label: "Head" },
+                { type: "h2", icon: <LuHeading2 />, label: "H2" },
+                { type: "h3", icon: <LuHeading3 />, label: "H3" },
                 {
                   type: "description",
                   icon: <BsTextParagraph />,
@@ -761,6 +799,7 @@ switch (field.type) {
               ].map((btn) => (
                 <button
                   key={btn.type}
+                  type="button"
                   className="flex flex-col items-center justify-center w-21 h-21 bg-white border-2 border-gray-300 rounded-2xl hover:border-blue-600 hover:text-blue-700 hover:shadow-xl transition-all group shadow-sm"
                   onClick={() => addField(btn.type)}
                 >
@@ -793,6 +832,10 @@ switch (field.type) {
       </div>
     </div>
   );
+};
+
+const ThemeDragIndicator = (props) => {
+  return <MdDragIndicator {...props} /> || <span className="text-xl">⋮⋮</span>;
 };
 
 export default AddBlog;

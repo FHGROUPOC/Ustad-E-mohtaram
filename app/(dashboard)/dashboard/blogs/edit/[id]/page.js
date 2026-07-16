@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { LuHeading2, LuQuote, LuLink } from "react-icons/lu";
+import { LuHeading2, LuHeading3, LuQuote, LuLink } from "react-icons/lu";
 import { BsTextParagraph, BsLayoutSidebarInsetReverse } from "react-icons/bs";
 import { MdOutlineFormatListBulleted, MdDragIndicator } from "react-icons/md";
 import { PiImage, PiImages } from "react-icons/pi";
@@ -129,6 +129,8 @@ const EditBlog = () => {
   // --- Builder Logic ---
   const addField = (type) => {
     const baseFields = {
+      h2: { type, value: "" },
+      h3: { type, value: "" },
       Sub: { type, value: "" },
       description: { type, value: "" },
       hyperlink: { type, linkTitle: "", linkUrl: "" },
@@ -142,7 +144,7 @@ const EditBlog = () => {
         sideDescription: "",
       },
       "double-image": { type, imageUrls: ["", ""], alts: ["", ""] },
-      quote: { type, value: "", author: currentUser?.name || "The Barber" },
+      quote: { type, value: "", author: currentUser?.name || "Writer" },
     };
     const newBlock = { ...baseFields[type], id: `block-${Date.now()}` };
     setMoreFields([...morefields, newBlock]);
@@ -213,8 +215,40 @@ const EditBlog = () => {
     const commonInputClass =
       "w-full p-2 border border-gray-400 rounded-md focus:ring-2 focus:ring-blue-600 outline-none placeholder-gray-500 text-gray-900 text-sm bg-white";
 
+    const headingTypes = ["h2", "h3", "Sub"];
+    const isHeading = headingTypes.includes(field.type);
+
+    if (isHeading) {
+      const headingStyles = {
+        h2: "font-extrabold text-xl border-l-4 border-orange-500 pl-2",
+        Sub: "font-extrabold text-xl border-l-4 border-orange-500 pl-2",
+        h3: "font-bold text-lg border-l-4 border-yellow-500 pl-2",
+      };
+      const currentStyle = headingStyles[field.type] || headingStyles["h2"];
+      const placeholderName = field.type === "Sub" ? "Heading 2" : field.type.toUpperCase();
+
+      return (
+        <div className="flex items-center gap-2 w-full">
+          <input
+            type="text"
+            className={`${commonInputClass} ${currentStyle}`}
+            placeholder={`${placeholderName} Text...`}
+            value={field.value || ""}
+            onChange={(e) =>
+              updateNestedField(index, "value", e.target.value)
+            }
+          />
+          <button
+            className="bg-red-600 text-white p-2 rounded-md transition-colors hover:bg-red-700 shrink-0"
+            onClick={() => handleRemoveField(index)}
+          >
+            ✕
+          </button>
+        </div>
+      );
+    }
+
     switch (field.type) {
-      case "Sub":
       case "description":
       case "bullet":
         return (
@@ -239,7 +273,7 @@ const EditBlog = () => {
               />
             )}
             <button
-              className="bg-red-600 text-white p-2 rounded-md transition-colors hover:bg-red-700"
+              className="bg-red-600 text-white p-2 rounded-md transition-colors hover:bg-red-700 shrink-0"
               onClick={() => handleRemoveField(index)}
             >
               ✕
@@ -612,7 +646,7 @@ const EditBlog = () => {
 
           {/* Sidebar */}
           <div className="w-full lg:w-80 space-y-6">
-            <div className="group relative border-2 border-dashed border-gray-400 rounded-2xl h-60 flex items-center justify-center bg-gray-50 overflow-hidden shadow-inner">
+            <div className="group relative border-2 border-dashed border-gray-400 rounded-2xl h-60 flex flex-col items-center justify-center bg-gray-50 overflow-hidden shadow-inner">
               {image ? (
                 <img
                   src={image}
@@ -728,7 +762,8 @@ const EditBlog = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               {[
-                { type: "Sub", icon: <LuHeading2 />, label: "Head" },
+                { type: "h2", icon: <LuHeading2 />, label: "H2" },
+                { type: "h3", icon: <LuHeading3 />, label: "H3" },
                 {
                   type: "description",
                   icon: <BsTextParagraph />,

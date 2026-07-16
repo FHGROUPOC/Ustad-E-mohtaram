@@ -80,13 +80,19 @@ export default async function Section3({ blogs }: { blogs: any[] }) {
         </div>
 
         <div className="row mt-3 g-4 align-items-stretch">
-          <div className="col-lg-7 col-12">
+          <div className="col-lg-4 col-md-12 col-12">
             {mainPost.map((card, idx) => (
               <ArticleCard2 key={`main-${idx}`} card={card} idx={idx} />
             ))}
           </div>
 
-          <div className="col-lg-5 col-12 d-flex flex-column gap-2 justify-content-between">
+          <div className="col-lg-4 col-md-12 col-12 d-flex flex-column gap-2 justify-content-between">
+            {sidePosts.map((card, idx) => (
+              <ArticleCard3 key={`side-${idx}`} card={card} idx={idx} />
+            ))}
+          </div>
+
+          <div className="col-lg-4 col-md-12 col-12 d-flex flex-column gap-2 justify-content-between">
             {sidePosts.map((card, idx) => (
               <ArticleCard3 key={`side-${idx}`} card={card} idx={idx} />
             ))}

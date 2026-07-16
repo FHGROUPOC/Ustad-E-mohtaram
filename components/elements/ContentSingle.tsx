@@ -13,6 +13,7 @@ import { MdAudiotrack } from "react-icons/md";
 // --- STRICT TYPES FOR THE DYNAMIC CONTENT BLOCKS ---
 export type BlogBlockType = 
   | "Sub" 
+  | "h3"
   | "description" 
   | "quote" 
   | "hyperlink" 
@@ -93,9 +94,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
     return {
       style: {
         whiteSpace: "pre-line" as const,
-        // If Urdu, use custom lowered line height (e.g., 1.8), otherwise standard English format
         lineHeight: isUrdu ? customLineHeight || "1.8" : "1.6",
-        // Using CSS variables to smoothly handle responsive override without losing fallback
         "--base-fs": baseFontSize,
         "--mobile-fs": mobileFontSize,
         fontSize: "var(--dynamic-fs, var(--base-fs))",
@@ -133,7 +132,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               return (
                 <p
                   key={i}
-                  className={`text-600 fw-medium mb-4 !mt-2 responsive-typography ${config.className}`}
+                  className={`text-600 fw-medium mb-4 mt-2! responsive-typography ${config.className}`}
                   style={config.style}
                   dir={config.dir}
                 >
@@ -142,7 +141,8 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               );
             }
 
-            case "Sub": {
+            case "Sub": 
+            case "h3": {
               const config = getTypographyStyle(
                 current.value,
                 "2.25rem",
@@ -250,7 +250,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               );
               const isRtl = config.dir === "rtl";
               return (
-                <div
+                <u
                   key={i}
                   className={`d-flex align-items-start gap-3 my-3 ${isRtl ? "flex-row-reverse" : ""}`}
                   dir={config.dir}
@@ -271,7 +271,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                   >
                     {current.value}
                   </p>
-                </div>
+                </u>
               );
             }
 
