@@ -35,14 +35,12 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
     return {
       style: {
         whiteSpace: "pre-line" as const,
-        // If Urdu, use custom lowered line height (e.g., 1.8), otherwise standard English format
-        lineHeight: isUrdu ? customLineHeight || "1.8" : "1.6",
-        // Using CSS variables to smoothly handle responsive override without losing fallback
+        lineHeight: isUrdu ? customLineHeight || "1.6" : "2",
         "--base-fs": baseFontSize,
         "--mobile-fs": mobileFontSize,
         fontSize: "var(--dynamic-fs, var(--base-fs))",
         fontFamily: isUrdu
-          ? "'Faiz Lahori Nastaleeq', 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', 'Urdu Typesetting', Tahoma, sans-serif"
+          ? "var(--font-noto-urdu), serif"
           : "inherit",
         wordSpacing: isUrdu ? "2px" : "normal",
       } as React.CSSProperties & { [key: string]: string },
@@ -66,17 +64,17 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
         {blog.blog_detail.map((current: any, i: number) => {
           switch (current.type) {
             case "description": {
-              // Base: 1.6rem -> Mobile: 1.25rem
+              // Base: 1.6rem -> Mobile: 1.25rem (Fixed your typo here as well)
               const config = getTypographyStyle(
                 current.value,
-                "1.6rem",
-                "1rem",
+                "18px",
+                "1.25rem",
                 "1.8",
               );
               return (
                 <p
                   key={i}
-                  className={`text-600 mb-4 !mt-2 responsive-typography ${config.className}`}
+                  className={`text-600 fw-medium mb-4 !mt-2 responsive-typography ${config.className}`}
                   style={config.style}
                   dir={config.dir}
                 >
@@ -96,7 +94,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               return (
                 <h3
                   key={i}
-                  className={`fw-bold mt-4 mb-3 text-dark uppercase tracking-tight responsive-typography ${config.className}`}
+                  className={`fw-medium mt-4 mb-3 text-dark uppercase tracking-tight responsive-typography ${config.className}`}
                   style={config.style}
                   dir={config.dir}
                 >

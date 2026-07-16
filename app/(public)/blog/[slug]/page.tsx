@@ -27,9 +27,6 @@ export async function generateMetadata(
   }
 
   const previousImages = (await parent).openGraph?.images || [];
-  
-  // Blog data ke mutabiq dynamic locale set karein (Urdu posts ke liye 'ur_PK')
-  const isUrduPost = blog.lang === "ur" || blog.category?.toLowerCase().includes("urdu");
 
   return {
     title: `${blog.title} | Dar ul Iqaan Magazine`,
@@ -48,7 +45,7 @@ export async function generateMetadata(
         },
         ...previousImages,
       ],
-      locale: isUrduPost ? "ur_PK" : "en_US",
+      locale: "en_US",
       type: "article",
       publishedTime: blog.createdAt,
       authors: [blog.postedby || "Staff"],
@@ -81,71 +78,55 @@ export default async function Single_2({ params }: PageProps) {
     .filter((b: any) => b.slug !== slug)
     .slice(0, 4);
 
-  // Check karein agar yeh specific blog post Urdu mein hai
-  // (Aap check kar sakte hain database field blog.lang === 'ur' ya phir slug/category ke through)
-  const isUrduPost = blog.lang === "ur" || blog.category?.toLowerCase().includes("urdu");
-
   return (
     <Layout>
       {/* 
-        Pure blog wrapper par conditional class aur direction handle ki hai.
-        Agar Urdu post hogi to 'font-urdu' class lagayegi aur layout text-right ke sath RTL ho jaye ga.
+        Aap ka components code bilkul 100% original state par hai. 
+        Koi wrapper div ya dynamic class layout ko touch nahi kar rahi.
       */}
-      <div className={isUrduPost ? "font-urdu text-right" : ""} dir={isUrduPost ? "rtl" : "ltr"}>
-        
-        {/* Main Blog Content Section */}
-        <Section1 blog={blog} author={author} />
 
-        {/* Social Sharing Integration */}
-        {/* <div className="container">
-          <div className="row">
-            <div className="col-lg-10 mx-auto">
-              <SocialShare title={blog.title} slug={slug} />
+      {/* Main Blog Content Section */}
+      <Section1 blog={blog} author={author} />
+
+      {/* Recommended Posts Section */}
+      <section className="related-post sec-padding bg-white">
+        <div className="container">
+          <div className="row g-4">
+            <div className="col-12">
+              <h5 className="mb-0 text-uppercase tracking-widest fs-9 fw-bold text-gray-400">
+                Recommended for You
+              </h5>
             </div>
-          </div>
-        </div> */}
 
-        {/* Recommended Posts Section */}
-        <section className="related-post sec-padding bg-white">
-          <div className="container">
-            <div className="row g-4">
-              <div className="col-12">
-                <h5 className={`mb-0 text-uppercase tracking-widest fs-9 fw-bold text-gray-400 ${isUrduPost ? "text-right" : ""}`}>
-                  {isUrduPost ? "آپ کے لیے تجویز کردہ" : "Recommended for You"}
-                </h5>
-              </div>
-
-              {recommendedBlogs.length > 0 ? (
-                recommendedBlogs.map((card: any, idx: number) => (
-                  <div className="col-6 col-md-4 col-lg-3" key={card._id || idx}>
-                    <ArticleCard5 card={card} idx={idx} />
-                  </div>
-                ))
-              ) : (
-                <div className="col-12">
-                  <p className="text-muted">
-                    {isUrduPost ? "ہمارے ہوم پیج پر مزید کہانیاں تلاش کریں۔" : "Explore more stories on our homepage."}
-                  </p>
+            {recommendedBlogs.length > 0 ? (
+              recommendedBlogs.map((card: any, idx: number) => (
+                <div className="col-6 col-md-4 col-lg-3" key={card._id || idx}>
+                  <ArticleCard5 card={card} idx={idx} />
                 </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Comments Section */}
-        <div className="container pb-20">
-          <div className="row">
-            <div className="col-lg-12 col-12 mx-auto">
-              <div className="mt-10">
-                <Comments
-                  blogId={blog._id?.toString() || ""}
-                  initialComments={serializedComments}
-                />
+              ))
+            ) : (
+              <div className="col-12">
+                <p className="text-muted">
+                  Explore more stories on our homepage.
+                </p>
               </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Comments Section */}
+      <div className="container pb-20">
+        <div className="row">
+          <div className="col-lg-12 col-12 mx-auto">
+            <div className="mt-10">
+              <Comments
+                blogId={blog._id?.toString() || ""}
+                initialComments={serializedComments}
+              />
             </div>
           </div>
         </div>
-
       </div>
     </Layout>
   );

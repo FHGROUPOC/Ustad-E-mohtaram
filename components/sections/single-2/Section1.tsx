@@ -80,7 +80,7 @@ export default function Section1({ blog, author }: { blog: any; author: any }) {
                   <h1
                     className="mt-3 mb-4 fw-bold text-dark"
                     style={{
-                      fontSize: "calc(1.8rem + 1.5vw)",
+                      fontSize: "40px",
                       lineHeight: "1.25",
                     }}
                   >

@@ -35,10 +35,12 @@ export default function RootLayout({
   const isUrdu = pathname?.startsWith("/ur") || pathname?.includes("/urdu");
 
   return (
-    // Dynamic lang attribute aur custom font variables HTML tag par pass karein
+    /* 
+      FIX: Humne 'dir' attribute ko hata diya hai taake grid system aur alignments 
+      bilkul English design ki tarah intact rahein aur layout na toote.
+    */
     <html 
       lang={isUrdu ? "ur" : "en"} 
-      dir={isUrdu ? "rtl" : "ltr"}
       className={`${geist.variable} ${notoUrdu.variable}`}
     >
       <body

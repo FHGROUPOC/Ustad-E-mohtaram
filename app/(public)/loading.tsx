@@ -8,7 +8,7 @@ export default function Loading() {
         <div id="loader" className="loader">
           <div className="loader-container">
             <div className="loader-icon">
-              <Image src="https://res.cloudinary.com/dmzhgg4m1/image/upload/v1776253531/logo-removebg-preview_guzxar.png" alt="Preloader" width={500} height={500} />
+              <Image src="https://res.cloudinary.com/dgtk4rthy/image/upload/v1784194573/Dar-Ul-Iqaan_lco9zf.png" alt="Dar-Ul-Iqaan Preloader" width={500} height={500} />
             </div>
           </div>
         </div>

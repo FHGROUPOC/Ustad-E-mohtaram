@@ -16,8 +16,8 @@ export default function Footer() {
                   <Image
                     className="mx-auto"
                     style={{ maxWidth: "200px" }}
-                    src="https://res.cloudinary.com/dmzhgg4m1/image/upload/v1776253531/logo-removebg-preview_guzxar.png"
-                    alt="magzin"
+                    src="https://res.cloudinary.com/dgtk4rthy/image/upload/v1784194573/Dar-Ul-Iqaan_lco9zf.png"
+                    alt="Dar-Ul-Iqaan Logo"
                     width={250}
                     height={32}
                   />

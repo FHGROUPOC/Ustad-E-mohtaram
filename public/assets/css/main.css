@@ -35,6 +35,7 @@ Table of contents
 :root {
   --tc-body-font-family: Geist;
   --tc-heading-font-family: Geist;
+  --font-noto-urdu:Noto Nastaliq "Urdu", serif;
   --tc-body-font-size: 16px;
   --tc-fs-1: 40px;
   --tc-fs-2: 32px;
@@ -1189,7 +1190,20 @@ h6 {
   line-height: var(--tc-heading-line-height);
   text-transform: unset;
 }
-
+/* Urdu font assignment using HTML attribute selector */
+html[lang="ur"] h1,
+html[lang="ur"] h2,
+html[lang="ur"] h3,
+html[lang="ur"] h4,
+html[lang="ur"] h5,
+html[lang="ur"] h6,
+html[lang="ur"] p,
+html[lang="ur"] span,
+html[lang="ur"] a {
+  font-family: var(--font-noto-urdu), serif !important;
+  /* Optional: Urdu text read karne mein aasan ho, is liye thoda line gap control karne ke liye */
+  line-height: 1.8 !important; 
+}
 h1 a,
 h2 a,
 h3 a,
