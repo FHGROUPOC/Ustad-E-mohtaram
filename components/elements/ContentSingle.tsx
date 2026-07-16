@@ -1,24 +1,81 @@
-"use client"
+"use client";
 import Image from "next/image";
-import React from "react";
+import React, { useState, useRef, useEffect, ChangeEvent } from "react";
+import { 
+  FaPlay, 
+  FaPause, 
+  FaVolumeUp, 
+  FaVolumeMute, 
+  FaYoutube 
+} from "react-icons/fa";
+import { MdAudiotrack } from "react-icons/md";
+
+// --- STRICT TYPES FOR THE DYNAMIC CONTENT BLOCKS ---
+export type BlogBlockType = 
+  | "Sub" 
+  | "description" 
+  | "quote" 
+  | "hyperlink" 
+  | "bullet" 
+  | "single-image" 
+  | "double-image" 
+  | "image-text-side" 
+  | "youtube";
+
+export interface BlogBlock {
+  type: BlogBlockType;
+  value?: string;
+  subType?: "video" | "audio";
+  author?: string;
+  linkUrl?: string;
+  linkTitle?: string;
+  imageUrl?: string;
+  imageUrls?: string[];
+  alts?: string[];
+  sideHeading?: string;
+  sideDescription?: string;
+}
+
+export interface BlogData {
+  _id?: string;
+  title?: string;
+  img?: string;
+  postedby?: string;
+  authorId?: string;
+  adminId?: string;
+  slug?: string;
+  category?: string;
+  imgalt?: string;
+  description?: string;
+  metaDescription?: string;
+  blog_detail?: BlogBlock[];
+  tags?: string[];
+  status?: string;
+  scheduledAt?: string;
+  views?: number;
+  comments?: any[];
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+}
 
 interface ContentSingleProps {
-  blog: any;
+  blog: BlogData;
 }
 
 const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
   if (!blog || !blog.blog_detail) return null;
 
   // Helper for YouTube ID extraction
-  const getYouTubeId = (url: string) => {
-    const regExp =
-      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url?.match(regExp);
+  const getYouTubeId = (url?: string): string | null => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
     return match && match[2].length === 11 ? match[2] : null;
   };
 
   // Helper to detect if a string contains Urdu/Arabic script characters
-  const isUrduText = (text: string): boolean => {
+  const isUrduText = (text?: string): boolean => {
     if (!text) return false;
     const urduRegex = /[\u0600-\u06FF]/;
     return urduRegex.test(text);
@@ -26,16 +83,19 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
 
   // Utility matching UrduPoint typography scaling with compacted line layouts
   const getTypographyStyle = (
-    text: string,
+    text: string | undefined,
     baseFontSize: string,
     mobileFontSize: string,
     customLineHeight?: string,
   ) => {
-    const isUrdu = isUrduText(text);
+    const safeText = text || "";
+    const isUrdu = isUrduText(safeText);
     return {
       style: {
         whiteSpace: "pre-line" as const,
-        lineHeight: isUrdu ? customLineHeight || "1.6" : "2",
+        // If Urdu, use custom lowered line height (e.g., 1.8), otherwise standard English format
+        lineHeight: isUrdu ? customLineHeight || "1.8" : "1.6",
+        // Using CSS variables to smoothly handle responsive override without losing fallback
         "--base-fs": baseFontSize,
         "--mobile-fs": mobileFontSize,
         fontSize: "var(--dynamic-fs, var(--base-fs))",
@@ -51,7 +111,6 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
 
   return (
     <div className="blog-content pb-5">
-      {/* Scope a clean CSS variable override for viewports less than 768px */}
       <style jsx global>{`
         @media (max-width: 768px) {
           .responsive-typography {
@@ -61,10 +120,10 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
       `}</style>
 
       <div className="article-body">
-        {blog.blog_detail.map((current: any, i: number) => {
+        {blog.blog_detail.map((current: BlogBlock, i: number) => {
           switch (current.type) {
             case "description": {
-              // Base: 1.6rem -> Mobile: 1.25rem (Fixed your typo here as well)
+              // Base: 1.6rem -> Mobile: 1.25rem
               const config = getTypographyStyle(
                 current.value,
                 "18px",
@@ -84,7 +143,6 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
             }
 
             case "Sub": {
-              // Base: 2.25rem -> Mobile: 1.65rem
               const config = getTypographyStyle(
                 current.value,
                 "2.25rem",
@@ -104,7 +162,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
             }
 
             case "single-image":
-              return (
+              return current.imageUrl ? (
                 <div key={i} className="my-5 text-center">
                   <Image
                     src={current.imageUrl}
@@ -115,17 +173,15 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                     style={{ height: "100%" }}
                   />
                 </div>
-              );
+              ) : null;
 
             case "image-text-side": {
-              // Side Heading Base: 1.95rem -> Mobile: 1.5rem
               const headingConfig = getTypographyStyle(
                 current.sideHeading,
                 "1.95rem",
                 "1.5rem",
                 "1.6",
               );
-              // Side Desc Base: 1.45rem -> Mobile: 1.2rem
               const descConfig = getTypographyStyle(
                 current.sideDescription,
                 "1.45rem",
@@ -139,24 +195,26 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                   <div
                     className={`row g-4 align-items-center ${isUrduLayout ? "flex-row-reverse" : ""}`}
                   >
-                    <div className="col-lg-6 col-md-6">
-                      <div className="position-relative overflow-hidden rounded-16 shadow-lg">
-                        <Image
-                          src={current.imageUrl}
-                          alt={current.sideHeading || "side image"}
-                          width={800}
-                          height={600}
-                          className="img-fluid w-100 object-fit-cover"
-                          style={{
-                            borderRadius: "16px",
-                            height: "100%",
-                            display: "block",
-                          }}
-                        />
+                    {current.imageUrl && (
+                      <div className="col-lg-6 col-md-6">
+                        <div className="position-relative overflow-hidden rounded-16 shadow-lg">
+                          <Image
+                            src={current.imageUrl}
+                            alt={current.sideHeading || "side image"}
+                            width={800}
+                            height={600}
+                            className="img-fluid w-100 object-fit-cover"
+                            style={{
+                              borderRadius: "16px",
+                              height: "100%",
+                              display: "block",
+                            }}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
 
-                    <div className="col-lg-6 col-md-6">
+                    <div className={current.imageUrl ? "col-lg-6 col-md-6" : "col-12"}>
                       <div className="ps-lg-2">
                         {current.sideHeading && (
                           <h3
@@ -167,13 +225,15 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                             {current.sideHeading}
                           </h3>
                         )}
-                        <p
-                          className={`mt-2 responsive-typography ${descConfig.className}`}
-                          style={descConfig.style}
-                          dir={descConfig.dir}
-                        >
-                          {current.sideDescription}
-                        </p>
+                        {current.sideDescription && (
+                          <p
+                            className={`mt-2 responsive-typography ${descConfig.className}`}
+                            style={descConfig.style}
+                            dir={descConfig.dir}
+                          >
+                            {current.sideDescription}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -217,21 +277,26 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
 
             case "youtube": {
               const vidId = getYouTubeId(current.value);
-              return vidId ? (
-                <div
-                  key={i}
-                  className="my-5 shadow-lg rounded-16 overflow-hidden"
-                >
+              if (!vidId) return null;
+
+              const isAudioMode = current.subType === "audio";
+
+              if (isAudioMode) {
+                return <BeautifulAudioPlayer key={i} videoId={vidId} />;
+              }
+
+              return (
+                <div key={i} className="my-5 shadow-lg rounded-16 overflow-hidden">
                   <iframe
                     width="100%"
                     height="450"
-                    src={`https://www.youtube.com/embed/${vidId}`}
+                    src={`https://www.youtube.com/embed/${vidId}?rel=0&modestbranding=1`}
                     title="YouTube video player"
                     frameBorder="0"
                     allowFullScreen
                   ></iframe>
                 </div>
-              ) : null;
+              );
             }
 
             case "double-image":
@@ -278,11 +343,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                       </span>
                     )}
                     <svg
-                      className={
-                        config.dir === "rtl"
-                          ? "me-2 transform rotate-180"
-                          : "ms-2"
-                      }
+                      className={config.dir === "rtl" ? "me-2 transform rotate-180" : "ms-2"}
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -314,19 +375,17 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               return (
                 <blockquote
                   key={i}
-                  className={` p-4 border-start border-4 border-primary bg-light rounded responsive-typography ${quoteConfig.className}`}
+                  className={`p-4 border-start border-4 border-primary bg-light rounded responsive-typography ${quoteConfig.className}`}
                   dir={quoteConfig.dir}
                 >
-                  <p
-                    className="text-dark m-0 fw-medium"
-                    style={quoteConfig.style}
-                  >
+                  <p className="text-dark m-0 fw-medium" style={quoteConfig.style}>
                     {current.value}
                   </p>
-                  <p className="fs-7 mb-0 mt-2 text-muted">
-                    By{" "}
-                    <span className="text-dark fw-bold">{current.author}</span>
-                  </p>
+                  {current.author && (
+                    <p className="fs-7 mb-0 mt-2 text-muted">
+                      By <span className="text-dark fw-bold">{current.author}</span>
+                    </p>
+                  )}
                 </blockquote>
               );
             }
@@ -336,6 +395,234 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
           }
         })}
       </div>
+    </div>
+  );
+};
+
+// --- WHITE GLASSMORPHISM BEAUTIFUL AUDIO PLAYER ---
+interface BeautifulAudioPlayerProps {
+  videoId: string;
+}
+
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: (() => void) | undefined;
+  }
+}
+
+const BeautifulAudioPlayer: React.FC<BeautifulAudioPlayerProps> = ({ videoId }) => {
+  const playerRef = useRef<any>(null);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [currentTime, setCurrentTime] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+
+  useEffect(() => {
+    // Load YouTube API script globally if not already available
+    if (!window.YT) {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName("script")[0];
+      if (firstScriptTag && firstScriptTag.parentNode) {
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      }
+    }
+
+    let player: any;
+    const initPlayer = () => {
+      player = new window.YT.Player(`yt-audio-player-${videoId}`, {
+        height: "1",
+        width: "1",
+        videoId: videoId,
+        playerVars: {
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          rel: 0,
+          modestbranding: 1,
+          iv_load_policy: 3,
+          autoplay: 0,
+        },
+        events: {
+          onReady: (event: any) => {
+            playerRef.current = event.target;
+            setDuration(event.target.getDuration() || 0);
+          },
+          onStateChange: (event: any) => {
+            // YT.PlayerState.PLAYING = 1, PAUSED = 2, ENDED = 0
+            if (event.data === 1) {
+              setIsPlaying(true);
+            } else {
+              setIsPlaying(false);
+            }
+          },
+        },
+      });
+    };
+
+    if (window.YT && window.YT.Player) {
+      initPlayer();
+    } else {
+      window.onYouTubeIframeAPIReady = initPlayer;
+    }
+
+    const interval = setInterval(() => {
+      if (playerRef.current && typeof playerRef.current.getCurrentTime === "function") {
+        setCurrentTime(playerRef.current.getCurrentTime());
+      }
+    }, 350);
+
+    return () => {
+      clearInterval(interval);
+      if (player && typeof player.destroy === "function") player.destroy();
+    };
+  }, [videoId]);
+
+  const togglePlay = (): void => {
+    if (!playerRef.current) return;
+    if (isPlaying) {
+      playerRef.current.pauseVideo();
+    } else {
+      playerRef.current.playVideo();
+    }
+  };
+
+  const toggleMute = (): void => {
+    if (!playerRef.current) return;
+    if (isMuted) {
+      playerRef.current.unMute();
+      setIsMuted(false);
+    } else {
+      playerRef.current.mute();
+      setIsMuted(true);
+    }
+  };
+
+  const handleSeekChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    if (!playerRef.current) return;
+    const seekToTime = parseFloat(e.target.value);
+    playerRef.current.seekTo(seekToTime, true);
+    setCurrentTime(seekToTime);
+  };
+
+  const formatTime = (seconds: number): string => {
+    if (isNaN(seconds)) return "00:00";
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    
+    const pad = (num: number) => String(num).padStart(2, "0");
+    return hrs > 0 
+      ? `${hrs}:${pad(mins)}:${pad(secs)}` 
+      : `${pad(mins)}:${pad(secs)}`;
+  };
+
+  return (
+    <div 
+      className="w-100 my-4 d-flex flex-column flex-md-row align-items-center gap-3 p-3 position-relative"
+      style={{
+        background: "rgba(255, 255, 255, 0.65)",
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
+        border: "1px solid rgba(255, 255, 255, 0.5)",
+        borderRadius: "16px",
+        boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.06)",
+      }}
+    >
+      {/* CRITICAL FIX: YouTube needs the element to be technically visible to stream cleanly. 
+        We use pointer-events-none and absolute positioning to safely move it off screen bounds.
+      */}
+      <div 
+        id={`yt-audio-player-${videoId}`} 
+        className="position-absolute" 
+        style={{ width: "1px", height: "1px", top: "-10px", left: "-10px", pointerEvents: "none" }} 
+      />
+
+      {/* Left Details Section */}
+      <div className="d-flex align-items-center gap-3 w-100 md:w-auto flex-grow-1 min-w-0">
+        <div 
+          className="rounded-12 d-flex align-items-center justify-content-center border"
+          style={{ 
+            width: "44px", 
+            height: "44px",
+            background: "rgba(13, 110, 253, 0.08)",
+            borderColor: "rgba(13, 110, 253, 0.15)"
+          }}
+        >
+          <MdAudiotrack 
+            size={20} 
+            className="text-primary" 
+            style={{
+              animation: isPlaying ? "bounce 1.2s infinite" : "none"
+            }} 
+          />
+        </div>
+        <div className="flex-grow-1 min-w-0">
+          {/* <h5 className="m-0 text-dark truncate text-sm fw-bold tracking-wide">Audio Version</h5> */}
+          <p className="m-0 text-muted d-flex align-items-center gap-1 mt-0.5" style={{ fontSize: "15px", fontWeight: 500 }}>
+            <FaYoutube className="text-danger" /> YouTube Stream Audio Source
+          </p>
+        </div>
+      </div>
+
+      {/* Controls & Scrubber Section */}
+      <div className="d-flex align-items-center gap-3 w-100 flex-grow-1">
+        <button
+          onClick={togglePlay}
+          className="rounded-circle border-0 text-white d-flex align-items-center justify-content-center transition shadow-sm"
+          style={{ 
+            width: "38px", 
+            height: "38px", 
+            cursor: "pointer",
+            backgroundColor: "#0d6efd",
+            transition: "transform 0.2s, background-color 0.2s"
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+          onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+        >
+          {isPlaying ? <FaPause size={12} /> : <FaPlay className="ms-0.5" size={12} />}
+        </button>
+
+        <div className="flex-grow-1 d-flex align-items-center gap-2">
+          <span className="font-monospace text-muted fw-medium" style={{ fontSize: "11px", minWidth: "34px" }}>
+            {formatTime(currentTime)}
+          </span>
+          <input
+            type="range"
+            min="0"
+            max={duration || 100}
+            value={currentTime}
+            onChange={handleSeekChange}
+            className="flex-grow-1 cursor-pointer outline-none"
+            style={{ 
+              height: "5px",
+              accentColor: "#0d6efd",
+              background: "rgba(0,0,0,0.1)",
+              borderRadius: "4px"
+            }}
+          />
+          <span className="font-monospace text-muted fw-medium" style={{ fontSize: "11px", minWidth: "34px" }}>
+            {formatTime(duration)}
+          </span>
+        </div>
+
+        <button
+          onClick={toggleMute}
+          className="bg-transparent border-0 text-muted p-1 transition shrink-0"
+          style={{ cursor: "pointer" }}
+        >
+          {isMuted ? <FaVolumeMute size={18} className="text-danger" /> : <FaVolumeUp size={18} />}
+        </button>
+      </div>
+
+      {/* Standard bounce framing utility style snippet injected directly inside layout */}
+      <style jsx>{`
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+      `}</style>
     </div>
   );
 };
