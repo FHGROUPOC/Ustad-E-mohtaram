@@ -104,7 +104,7 @@ export default function Section1({ blog, author }: { blog: any; author: any }) {
                           height={41}
                         />
                         <span className="fs-7 text-dark fw-medium">
-                          {author?.name || blog.postedby || "Staff"}K
+                          {author?.name || blog.postedby || "Staff"}
                         </span>
                       </Link>
 
