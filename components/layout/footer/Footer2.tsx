@@ -14,7 +14,7 @@ export default function Footer() {
                                     <Link className="dark-mode-invert" href="/index-2">
                                         <Image src="/assets/imgs/template/logo/logo-dark.svg" width={143} height={18} alt="logo" />
                                     </Link>
-                                    <p className="fs-7 m-0">The colors of life.</p>
+                                    <p className="fs-7 m-0">The House of Faith</p>
                                 </div>
                                 <p className="fs-7 text-dark mt-4">Blending tech, life, and business. Stay informed with fresh trends, smart insights, and expert takes across every topic that matters.</p>
                                 <div className="d-inline-flex group-social-icons">

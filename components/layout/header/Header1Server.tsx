@@ -79,7 +79,7 @@ export default async function Header1Server() {
               />
             </Link>
             <span className="text-muted fs-7 d-none d-lg-block">
-              The House of faith
+              The House of Faith
             </span>
           </div>
 

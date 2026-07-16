@@ -23,7 +23,7 @@ export default function Footer() {
                   />
                 </Link>
                 <p className="text-dark mb-5 mt-2">
-                  Your Gateway to Global News
+                  The House of Faith
                 </p>
                 <div className="d-flex flex-wrap justify-content-center align-items-center gap-lg-5 gap-md-4">
                   <a href="#" className="text-600 hover-dark d-block p-2">
