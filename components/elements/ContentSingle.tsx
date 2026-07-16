@@ -10,9 +10,10 @@ import {
 } from "react-icons/fa";
 import { MdAudiotrack } from "react-icons/md";
 
-// --- STRICT TYPES FOR THE DYNAMIC CONTENT BLOCKS ---
+// --- STRICT TYPES MATCHED WITH BACKEND ---
 export type BlogBlockType = 
   | "Sub" 
+  | "h2"
   | "h3"
   | "description" 
   | "quote" 
@@ -122,7 +123,6 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
         {blog.blog_detail.map((current: BlogBlock, i: number) => {
           switch (current.type) {
             case "description": {
-              // Base: 1.6rem -> Mobile: 1.25rem
               const config = getTypographyStyle(
                 current.value,
                 "18px",
@@ -132,7 +132,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               return (
                 <p
                   key={i}
-                  className={`text-600 fw-medium mb-4 mt-2! responsive-typography ${config.className}`}
+                  className={`text-600 fw-medium mb-4 mt-2 responsive-typography ${config.className}`}
                   style={config.style}
                   dir={config.dir}
                 >
@@ -141,13 +141,32 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               );
             }
 
+            case "h2": {
+              const config = getTypographyStyle(
+                current.value,
+                "2.5rem",
+                "1.85rem",
+                "1.8",
+              );
+              return (
+                <h2
+                  key={i}
+                  className={`fw-bold mt-5 mb-3 text-dark uppercase tracking-tight responsive-typography ${config.className}`}
+                  style={config.style}
+                  dir={config.dir}
+                >
+                  {current.value}
+                </h2>
+              );
+            }
+
             case "Sub": 
             case "h3": {
               const config = getTypographyStyle(
                 current.value,
-                "2.25rem",
+                "2rem",
                 "1.65rem",
-                "1.6",
+                "1.8",
               );
               return (
                 <h3
@@ -250,7 +269,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               );
               const isRtl = config.dir === "rtl";
               return (
-                <u
+                <div
                   key={i}
                   className={`d-flex align-items-start gap-3 my-3 ${isRtl ? "flex-row-reverse" : ""}`}
                   dir={config.dir}
@@ -271,7 +290,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
                   >
                     {current.value}
                   </p>
-                </u>
+                </div>
               );
             }
 
@@ -419,7 +438,6 @@ const BeautifulAudioPlayer: React.FC<BeautifulAudioPlayerProps> = ({ videoId }) 
   const [duration, setDuration] = useState<number>(0);
 
   useEffect(() => {
-    // Load YouTube API script globally if not already available
     if (!window.YT) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
@@ -450,7 +468,6 @@ const BeautifulAudioPlayer: React.FC<BeautifulAudioPlayerProps> = ({ videoId }) 
             setDuration(event.target.getDuration() || 0);
           },
           onStateChange: (event: any) => {
-            // YT.PlayerState.PLAYING = 1, PAUSED = 2, ENDED = 0
             if (event.data === 1) {
               setIsPlaying(true);
             } else {
@@ -530,9 +547,6 @@ const BeautifulAudioPlayer: React.FC<BeautifulAudioPlayerProps> = ({ videoId }) 
         boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.06)",
       }}
     >
-      {/* CRITICAL FIX: YouTube needs the element to be technically visible to stream cleanly. 
-        We use pointer-events-none and absolute positioning to safely move it off screen bounds.
-      */}
       <div 
         id={`yt-audio-player-${videoId}`} 
         className="position-absolute" 
@@ -559,7 +573,6 @@ const BeautifulAudioPlayer: React.FC<BeautifulAudioPlayerProps> = ({ videoId }) 
           />
         </div>
         <div className="flex-grow-1 min-w-0">
-          {/* <h5 className="m-0 text-dark truncate text-sm fw-bold tracking-wide">Audio Version</h5> */}
           <p className="m-0 text-muted d-flex align-items-center gap-1 mt-0.5" style={{ fontSize: "15px", fontWeight: 500 }}>
             <FaYoutube className="text-danger" /> YouTube Stream Audio Source
           </p>
@@ -616,7 +629,6 @@ const BeautifulAudioPlayer: React.FC<BeautifulAudioPlayerProps> = ({ videoId }) 
         </button>
       </div>
 
-      {/* Standard bounce framing utility style snippet injected directly inside layout */}
       <style jsx>{`
         @keyframes bounce {
           0%, 100% { transform: translateY(0); }

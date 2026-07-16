@@ -74,23 +74,25 @@ const AddBlog = () => {
   }, [router]);
 
   const addField = (type) => {
+    const uniqueId = `block-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const baseFields = {
-      h2: { type, value: "" },
-      h3: { type, value: "" },
-      Sub: { type, value: "" },
-      description: { type, value: "" },
-      bullet: { type, value: "" },
-      youtube: { type, value: "", subType: "video" },
-      hyperlink: { type, linkTitle: "", linkUrl: "" },
-      "single-image": { type, value: "", imageUrl: "" },
+      h2: { id: uniqueId, type, value: "" },
+      h3: { id: uniqueId, type, value: "" },
+      Sub: { id: uniqueId, type, value: "" },
+      description: { id: uniqueId, type, value: "" },
+      bullet: { id: uniqueId, type, value: "" },
+      youtube: { id: uniqueId, type, value: "", subType: "video" },
+      hyperlink: { id: uniqueId, type, linkTitle: "", linkUrl: "" },
+      "single-image": { id: uniqueId, type, value: "", imageUrl: "" },
       "image-text-side": {
+        id: uniqueId,
         type,
         imageUrl: "",
         sideHeading: "",
         sideDescription: "",
       },
-      "double-image": { type, imageUrls: ["", ""], alts: ["", ""] },
-      quote: { type, value: "", author: currentUser?.name || "Writer" },
+      "double-image": { id: uniqueId, type, imageUrls: ["", ""], alts: ["", ""] },
+      quote: { id: uniqueId, type, value: "", author: currentUser?.name || "Writer" },
     };
     setMoreFields([...morefields, baseFields[type]]);
   };
@@ -143,7 +145,7 @@ const AddBlog = () => {
       const placeholderName = field.type === "Sub" ? "Heading 2" : field.type.toUpperCase();
 
       return (
-        <div key={index} className="flex items-center gap-2 w-full mb-3">
+        <div key={field.id || index} className="flex items-center gap-2 w-full mb-3">
           <input
             type="text"
             className={`${commonInputClass} ${currentStyle}`}
@@ -167,7 +169,7 @@ const AddBlog = () => {
       case "description":
       case "bullet":
         return (
-          <div key={index} className="flex items-center gap-2 w-full mb-3">
+          <div key={field.id || index} className="flex items-center gap-2 w-full mb-3">
             {field.type === "description" ? (
               <textarea
                 rows={3}
@@ -200,7 +202,7 @@ const AddBlog = () => {
 
       case "youtube":
         return (
-          <div key={index} className="flex flex-col gap-2 w-full mb-3 p-3 bg-red-50 border border-red-200 rounded-xl">
+          <div key={field.id || index} className="flex flex-col gap-2 w-full mb-3 p-3 bg-red-50 border border-red-200 rounded-xl">
             <div className="flex items-center gap-2 w-full">
               <input
                 type="text"
@@ -224,7 +226,7 @@ const AddBlog = () => {
               <label className="flex items-center gap-1 text-xs font-bold text-gray-900 cursor-pointer select-none">
                 <input
                   type="radio"
-                  name={`yt-mode-${index}`}
+                  name={`yt-mode-${field.id || index}`}
                   checked={!field.subType || field.subType === "video"}
                   onChange={() => updateNestedField(index, "subType", "video")}
                   className="text-red-600 focus:ring-red-500"
@@ -234,7 +236,7 @@ const AddBlog = () => {
               <label className="flex items-center gap-1 text-xs font-bold text-gray-900 cursor-pointer select-none">
                 <input
                   type="radio"
-                  name={`yt-mode-${index}`}
+                  name={`yt-mode-${field.id || index}`}
                   checked={field.subType === "audio"}
                   onChange={() => updateNestedField(index, "subType", "audio")}
                   className="text-red-600 focus:ring-red-500"
@@ -248,7 +250,7 @@ const AddBlog = () => {
       case "hyperlink":
         return (
           <div
-            key={index}
+            key={field.id || index}
             className="flex flex-col md:flex-row items-center gap-3 w-full mb-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl relative"
           >
             <div className="flex-1 w-full">
@@ -291,7 +293,7 @@ const AddBlog = () => {
       case "single-image":
         return (
           <div
-            key={index}
+            key={field.id || index}
             className="border border-dashed border-gray-500 p-4 rounded-lg mb-4 bg-gray-50 flex flex-col gap-3"
           >
             <div className="flex flex-col md:flex-row items-center gap-4">
@@ -340,7 +342,7 @@ const AddBlog = () => {
       case "image-text-side":
         return (
           <div
-            key={index}
+            key={field.id || index}
             className="border-2 border-blue-200 p-4 rounded-xl bg-blue-50 mb-4 relative shadow-sm"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -404,7 +406,7 @@ const AddBlog = () => {
       case "double-image":
         return (
           <div
-            key={index}
+            key={field.id || index}
             className="border border-gray-400 p-4 rounded-xl bg-gray-50 mb-4 relative"
           >
             <div className="grid grid-cols-2 gap-4">
@@ -453,7 +455,7 @@ const AddBlog = () => {
       case "quote":
         return (
           <div
-            key={index}
+            key={field.id || index}
             className="border-l-8 border-black p-4 bg-gray-200 mb-4 flex gap-4 items-start relative shadow-inner"
           >
             <LuQuote size={30} className="text-gray-600 shrink-0" />
@@ -738,8 +740,8 @@ const AddBlog = () => {
                 >
                   {morefields.map((field, index) => (
                     <Draggable
-                      key={`field-${index}`}
-                      draggableId={`field-${index}`}
+                      key={field.id || `field-${index}`}
+                      draggableId={field.id || `field-${index}`}
                       index={index}
                     >
                       {(provided) => (
