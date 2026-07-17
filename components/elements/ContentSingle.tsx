@@ -151,7 +151,7 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
               return (
                 <h2
                   key={i}
-                  className={`fw-bold mt-5 mb-3 text-dark uppercase tracking-tight responsive-typography ${config.className}`}
+                  className={`fw-medium mt-5 mb-3 text-dark uppercase tracking-tight responsive-typography ${config.className}`}
                   style={config.style}
                   dir={config.dir}
                 >
@@ -164,8 +164,8 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
             case "h3": {
               const config = getTypographyStyle(
                 current.value,
-                "2rem",
-                "1.65rem",
+                "27px",
+                "26px",
                 "1.8",
               );
               return (
