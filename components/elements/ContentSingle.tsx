@@ -164,8 +164,8 @@ const ContentSingle: React.FC<ContentSingleProps> = ({ blog }) => {
             case "h3": {
               const config = getTypographyStyle(
                 current.value,
-                "27px",
                 "26px",
+                "24px",
                 "1.8",
               );
               return (
